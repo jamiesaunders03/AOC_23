@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace AocHelper.DataSources
 {
     internal class WebRequestData : IInputDataFetcher
@@ -47,7 +42,7 @@ namespace AocHelper.DataSources
         /// Gets the user cookie for AoC stored in 'token.txt' at the root of the sln
         /// </summary>
         /// <returns></returns>
-        private string GetCookie()
+        private static string GetCookie()
         {
             string cookieFile = Path.Combine(_startupPath, "token.txt");
 

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AocHelper;
-using Microsoft.VisualBasic.CompilerServices;
+﻿using AocHelper;
 
 namespace AOC_23.Challenges
 {
     internal class Day1 : IAocChallenge
     {
-        private static Dictionary<string, int> _intValues = new()
+        private static readonly Dictionary<string, int> _intValues = new()
         {
             ["0"] = 0,
             ["1"] = 1,
@@ -24,7 +18,7 @@ namespace AOC_23.Challenges
             ["9"] = 9,
         };
 
-        private static Dictionary<string, int> _intStringValues = new(_intValues)
+        private static readonly Dictionary<string, int> _intStringValues = new(_intValues)
         {
             ["one"] = 1,
             ["two"] = 2,
@@ -39,20 +33,13 @@ namespace AOC_23.Challenges
 
         public void RunChallenge()
         {
-            string[] input = GetInput();
+            string[] input = new FetchData(1).ReadInput().TrimEnd().Split('\n');
 
             int part1 = Challenge1(input);
             int part2 = Challenge2(input);
 
             Console.WriteLine($"Part 1: {part1}");
             Console.WriteLine($"Part 2: {part2}");
-        }
-
-        internal static string[] GetInput()
-        {
-            string data = new FetchData(1).ReadInput().TrimEnd();
-
-            return data.Split('\n');
         }
 
         internal int Challenge1(string[] lines)

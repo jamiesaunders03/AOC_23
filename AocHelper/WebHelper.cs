@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
 namespace AocHelper
 {
     internal class WebHelper
     {
+        /// <summary>
+        /// Make a get request to a given url with the supplied headers and return the response as a string
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="headers"></param>
+        /// <returns></returns>
         public string Get(string uri, Dictionary<string, string> headers)
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);

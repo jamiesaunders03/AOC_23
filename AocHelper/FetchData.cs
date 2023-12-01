@@ -1,5 +1,4 @@
-﻿
-using AocHelper.DataSources;
+﻿using AocHelper.DataSources;
 
 namespace AocHelper
 {
