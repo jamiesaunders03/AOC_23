@@ -4,7 +4,6 @@ namespace AocHelper.DataSources
     internal class WebRequestData : IInputDataFetcher
     {
         private const string URL = "https://adventofcode.com/{0}/day/{1}/input";
-        private static readonly string _startupPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
 
         public int Day { get; }
         public int Year { get; }
@@ -44,7 +43,7 @@ namespace AocHelper.DataSources
         /// <returns></returns>
         private static string GetCookie()
         {
-            string cookieFile = Path.Combine(_startupPath, "token.txt");
+            string cookieFile = Path.Combine(Constants.StartupPath, "token.txt");
 
             using StreamReader sr = new(cookieFile);
             string cookie = sr.ReadToEnd();

@@ -29,6 +29,8 @@ namespace AocHelper
                 bool result = source.GetInput(out string output);
                 if (result)
                 {
+                    InputSave save = new(Year, Day);
+                    save.Save(output);
                     return output;
                 }
 
