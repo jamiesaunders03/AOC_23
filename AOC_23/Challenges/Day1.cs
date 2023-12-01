@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AocHelper;
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace AOC_23.Challenges
@@ -49,15 +50,9 @@ namespace AOC_23.Challenges
 
         internal static string[] GetInput()
         {
-            string path = "D:\\Programming\\C#\\AOC_23\\AOC_23\\Data\\input.txt";
-            List<string> lines = new();
-            using var reader = new StreamReader(path);
-            while (reader.ReadLine() is { } line)
-            {
-                lines.Add(line);
-            }
+            string data = new FetchData(1).ReadInput().TrimEnd();
 
-            return lines.ToArray();
+            return data.Split('\n');
         }
 
         internal int Challenge1(string[] lines)
