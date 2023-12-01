@@ -83,7 +83,7 @@ namespace AOC_23.Challenges
             return total;
         }
 
-        private int GetValue(string seq, Dictionary<string, int> values, bool forwards)
+        private static int GetValue(string seq, Dictionary<string, int> values, bool forwards)
         {
             int start = forwards ? 0 : seq.Length - 1;
             int stop = forwards ? seq.Length : -1;

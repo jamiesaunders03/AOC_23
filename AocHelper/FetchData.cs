@@ -1,8 +1,11 @@
-﻿namespace AocHelper
+﻿
+using AocHelper.DataSources;
+
+namespace AocHelper
 {
     public class FetchData
     {
-        private const string URL = "https://adventofcode.com/{0}/day/{1}/input";
+        private IInputDataFetcher[] _dataSources = Array.Empty<IInputDataFetcher>();
 
         public int Day { get; }
         public int Year { get; }
@@ -11,27 +14,37 @@
         {
             Day = day;
             Year = year;
+
+            SetDataSources();
         }
 
+        /// <summary>
+        /// Reads the input data for the current days challenge
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="IOException">Throws IO exception if the data cannot be read</exception>
         public string ReadInput()
         {
-            string url = string.Format(URL, Year, Day);
-            Dictionary<string, string> headers = new() { ["Cookie"] = GetCookie()};
+            foreach (IInputDataFetcher source in _dataSources)
+            {
+                bool result = source.GetInput(out string output);
+                if (result)
+                {
+                    return output;
+                }
 
-            var helper = new WebHelper();
-            string output = helper.Get(url, headers);
+                Console.Error.WriteLine(output);
+            }
 
-            return output;
+            throw new IOException("Unable to get input for challenge");
         }
 
-        public string GetCookie()
+        private void SetDataSources()
         {
-            const string cookieFile = "../../../../token.txt";
-
-            using StreamReader sr = new StreamReader(cookieFile);
-            string cookie = sr.ReadToEnd();
-
-            return cookie;
+            _dataSources = new IInputDataFetcher[]
+            {
+                new WebRequestData(Day, Year),
+            };
         }
     }
 }
