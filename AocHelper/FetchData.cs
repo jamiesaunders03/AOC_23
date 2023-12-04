@@ -1,9 +1,12 @@
 ﻿using AocHelper.DataSources;
+using log4net;
+using System.Reflection;
 
 namespace AocHelper
 {
     public class FetchData
     {
+        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private IInputDataFetcher[] _dataSources = Array.Empty<IInputDataFetcher>();
 
         public int Day { get; }
@@ -21,9 +24,10 @@ namespace AocHelper
         /// Reads the input data for the current days challenge
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="IOException">Throws IO exception if the data cannot be read</exception>
+        /// <exception cref="IOException">Throws IO exception if the data cannot be read from any source</exception>
         public string ReadInput()
         {
+            _logger.Info("Fetching data");
             foreach (IInputDataFetcher source in _dataSources)
             {
                 bool result = source.GetInput(out string output);

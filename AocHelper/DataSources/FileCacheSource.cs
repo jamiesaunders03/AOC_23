@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 
 namespace AocHelper.DataSources
 {
     internal class FileCacheSource : IInputDataFetcher
     {
         private const string CACHE_PATH = ".cache/Input/{0}/day{1}.txt";
+        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// The day of the challenge
@@ -22,6 +25,8 @@ namespace AocHelper.DataSources
 
         public FileCacheSource(int day, int year)
         {
+            _logger.DebugFormat("Creating file loader instance for challenge {0}-12-{1}", day, year);
+
             Day = day;
             Year = year;
         }
@@ -33,6 +38,7 @@ namespace AocHelper.DataSources
         /// <returns>Whether the operation was a success</returns>
         public bool GetInput(out string data)
         {
+            _logger.Info("Attempting to fetch data from text file");
             try
             {
                 data = File.ReadAllText(GetFilePath());
@@ -40,11 +46,13 @@ namespace AocHelper.DataSources
             }
             catch (FileNotFoundException)
             {
+                _logger.Warn("No cached data could be found");
                 data = "File does not exist, cannot load from cache";
                 return false;
             }
             catch (Exception e)
             {
+                _logger.Error("An unexpected error occurred: ", e);
                 data = "Unexpected error: " + e.Message;
                 return false;
             }

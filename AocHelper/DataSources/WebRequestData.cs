@@ -1,10 +1,13 @@
 ﻿using AocHelper.Utilities;
+using log4net;
+using System.Reflection;
 
 namespace AocHelper.DataSources
 {
     internal class WebRequestData : IInputDataFetcher
     {
         private const string URL = "https://adventofcode.com/{0}/day/{1}/input";
+        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public int Day { get; }
         public int Year { get; }
@@ -22,6 +25,7 @@ namespace AocHelper.DataSources
         /// <returns></returns>
         public bool GetInput(out string data)
         {
+            _logger.Info("Loading data from adventofcode.com");
             string url = string.Format(URL, Year, Day);
             Dictionary<string, string> headers = new() { ["Cookie"] = GetCookie() };
 
@@ -33,6 +37,7 @@ namespace AocHelper.DataSources
             }
             catch (Exception ex)
             {
+                _logger.Error("An unexpected error occurred", ex);
                 data = ex.Message;
                 return false;
             }
@@ -44,6 +49,7 @@ namespace AocHelper.DataSources
         /// <returns></returns>
         private static string GetCookie()
         {
+            _logger.Info("Getting user cookie");
             string cookieFile = Path.Combine(Constants.StartupPath, "token.txt");
 
             using StreamReader sr = new(cookieFile);

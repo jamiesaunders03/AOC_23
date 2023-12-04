@@ -1,6 +1,8 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +11,7 @@ namespace AocHelper
     internal class InputSave
     {
         private const string CACHE_PATH = ".cache/Input/{0}/";
+        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public int Year { get; }
         public int Day { get; }
@@ -26,13 +29,15 @@ namespace AocHelper
         /// <param name="force">Whether to force overwrite existing data</param>
         public void Save(string data, bool force = false)
         {
+            _logger.Info("Saving data cache");
+
             string dirPath = GetFilePath();
             string fileName = $"day{Day}.txt";
             string filePath = Path.Combine(dirPath, fileName);
 
             if (!force && File.Exists(filePath))
             {
-                // Input saved, take no action
+                _logger.Info("Data cache already exists, no save required");
                 return;
             }
 
