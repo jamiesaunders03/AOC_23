@@ -21,39 +21,37 @@ namespace AOC_23.Challenges
 
         public static readonly Regex _cardRegex = new(@"Card\s+(\d+): ([0-9 ]+) \| ([0-9 ]+)");
 
-        public void RunChallenge()
+        private readonly ScratchCard[] _cards;
+
+        public int Day => 4;
+
+        public Day4()
         {
             string[] input = new FetchData(4).ReadInput().TrimEnd().Split('\n');
-            ScratchCard[] cards = ParseInput(input);
-
-            int part1 = Challenge1(cards);
-            int part2 = Challenge2(cards);
-
-            Console.WriteLine($"Part 1: {part1}");
-            Console.WriteLine($"Part 2: {part2}");
+            _cards = ParseInput(input);
         }
 
-        public int Challenge1(ScratchCard[] cards)
+        public string Challenge1()
         {
             int sum = 0;
 
-            foreach (ScratchCard card in cards)
+            foreach (ScratchCard card in _cards)
             {
                 int overlap = card.CardNumbers.Intersect(card.WinningNumbers).Count();
                 if (overlap > 0)
                     sum += 1 << (overlap - 1);
             }
 
-            return sum;
+            return sum.ToString();
         }
 
-        public int Challenge2(ScratchCard[] cards)
+        public string Challenge2()
         {
-            int[] cardCounts = Enumerable.Repeat<int>(1, cards.Length).ToArray();
+            int[] cardCounts = Enumerable.Repeat<int>(1, _cards.Length).ToArray();
 
-            for (int i = 0; i < cards.Length; ++i)
+            for (int i = 0; i < _cards.Length; ++i)
             {
-                ScratchCard card = cards[i];
+                ScratchCard card = _cards[i];
                 int overlap = card.CardNumbers.Intersect(card.WinningNumbers).Count();
 
                 for (int cardNum = card.CardNumber; cardNum < card.CardNumber + overlap; ++cardNum)
@@ -62,7 +60,7 @@ namespace AOC_23.Challenges
                 }
             }
 
-            return cardCounts.Sum();
+            return cardCounts.Sum().ToString();
         }
 
         private ScratchCard[] ParseInput(string[] input)
