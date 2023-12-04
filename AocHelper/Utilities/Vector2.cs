@@ -71,5 +71,14 @@ namespace AocHelper.Utilities
         {
             return Math.Max(Math.Abs(X - v.X), Math.Abs(Y - v.Y));
         }
+
+        /// <summary>
+        /// Returns the vector normal to this one with the same magnitude
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 Normal()
+        {
+            return new Vector2(-Y, X);
+        }
     }
 }
