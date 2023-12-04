@@ -8,7 +8,7 @@ namespace AocHelper.DataSources
 {
     internal class FileCacheSource : IInputDataFetcher
     {
-        private const string CACHE_PATH = ".cache/Input/{0}/";
+        private const string CACHE_PATH = ".cache/Input/{0}/day{1}.txt";
 
         /// <summary>
         /// The day of the challenge
