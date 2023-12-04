@@ -1,6 +1,5 @@
 ﻿using AocHelper;
-
-using Position = System.Tuple<int, int>;
+using AocHelper.Utilities;
 
 namespace AOC_23.Challenges
 {
@@ -9,9 +8,9 @@ namespace AOC_23.Challenges
         internal struct PartNumber
         {
             public int Number { get; }
-            public Position[] NumberPositions { get; }
+            public Vector2[] NumberPositions { get; }
 
-            public PartNumber(int number, Position[] numberPositions)
+            public PartNumber(int number, Vector2[] numberPositions)
             {
                 Number = number;
                 NumberPositions = numberPositions;
@@ -21,9 +20,9 @@ namespace AOC_23.Challenges
         internal struct SymbolPosition
         {
             public char Symbol { get; }
-            public Position Position { get; }
+            public Vector2 Position { get; }
 
-            public SymbolPosition(char symbol, Position symbolPos)
+            public SymbolPosition(char symbol, Vector2 symbolPos)
             {
                 Symbol = symbol;
                 Position = symbolPos;
@@ -53,7 +52,7 @@ namespace AOC_23.Challenges
             {
                 foreach (SymbolPosition symbol in symbolPositions)
                 {
-                    if (partNum.NumberPositions.Any(p => IsClose(p, symbol.Position)))
+                    if (partNum.NumberPositions.Any(p => IsAdjacent(p, symbol.Position)))
                     {
                         sum += partNum.Number;
                         break;
@@ -70,7 +69,7 @@ namespace AOC_23.Challenges
 
             foreach (SymbolPosition symbol in symbolPositions.Where(s => s.Symbol == GEAR_SYMBOL))
             {
-                PartNumber[] adjacent = partNumbers.Where(ps => ps.NumberPositions.Any(p => IsClose(p, symbol.Position))).ToArray();
+                PartNumber[] adjacent = partNumbers.Where(ps => ps.NumberPositions.Any(p => IsAdjacent(p, symbol.Position))).ToArray();
                 if (adjacent.Length == 2)
                 {
                     sum += adjacent[0].Number * adjacent[1].Number;
@@ -90,24 +89,24 @@ namespace AOC_23.Challenges
                 for (int x = 0; x < input[y].Length; ++x)
                 {
                     char symbol = input[y][x];
-                    if (IsNumber(symbol))
+                    if (symbol.IsNumber())
                     {
                         int num = symbol - '0';
-                        List<Position> positions = new() { new Position(x, y), };
+                        List<Vector2> positions = new() { new Vector2(x, y), };
 
-                        while (x + 1 < input[y].Length && IsNumber(input[y][x + 1]))
+                        while (x + 1 < input[y].Length && input[y][x + 1].IsNumber())
                         {
                             x += 1;
                             num *= 10;
                             num += input[y][x] - '0';
-                            positions.Add(new Position(x, y));
+                            positions.Add(new Vector2(x, y));
                         }
 
                         partNumbers.Add(new PartNumber(num, positions.ToArray()));
                     }
                     else if (symbol != NON_SYMBOL)
                     {
-                        symbolPos.Add(new SymbolPosition(symbol, new Position(x, y)));
+                        symbolPos.Add(new SymbolPosition(symbol, new Vector2(x, y)));
                     }
                 }
             }
@@ -115,14 +114,9 @@ namespace AOC_23.Challenges
             return (partNumbers.ToArray(), symbolPos.ToArray());
         }
 
-        private static bool IsNumber(char character)
+        private static bool IsAdjacent(Vector2 p1, Vector2 p2)
         {
-            return character is >= '0' and <= '9';
-        }
-
-        private static bool IsClose(Position p1, Position p2)
-        {
-            return Math.Abs(p1.Item1 - p2.Item1) <= 1 && Math.Abs(p1.Item2 - p2.Item2) <= 1;
+            return p1.MaxDimDistance(p2) <= 1;
         }
     }
 }
