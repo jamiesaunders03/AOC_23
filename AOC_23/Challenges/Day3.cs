@@ -53,7 +53,7 @@ namespace AOC_23.Challenges
             {
                 foreach (SymbolPosition symbol in symbolPositions)
                 {
-                    if (partNum.NumberPositions.Any(p => Close(p, symbol.Position)))
+                    if (partNum.NumberPositions.Any(p => IsClose(p, symbol.Position)))
                     {
                         sum += partNum.Number;
                         break;
@@ -70,7 +70,7 @@ namespace AOC_23.Challenges
 
             foreach (SymbolPosition symbol in symbolPositions.Where(s => s.Symbol == GEAR_SYMBOL))
             {
-                PartNumber[] adjacent = partNumbers.Where(ps => ps.NumberPositions.Any(p => Close(p, symbol.Position))).ToArray();
+                PartNumber[] adjacent = partNumbers.Where(ps => ps.NumberPositions.Any(p => IsClose(p, symbol.Position))).ToArray();
                 if (adjacent.Length == 2)
                 {
                     sum += adjacent[0].Number * adjacent[1].Number;
@@ -80,7 +80,7 @@ namespace AOC_23.Challenges
             return sum;
         }
 
-        public (PartNumber[], SymbolPosition[]) ParseInput(string[] input)
+        public static (PartNumber[], SymbolPosition[]) ParseInput(string[] input)
         {
             var partNumbers = new List<PartNumber>();
             var symbolPos = new List<SymbolPosition>();
@@ -97,7 +97,7 @@ namespace AOC_23.Challenges
 
                         while (x + 1 < input[y].Length && IsNumber(input[y][x + 1]))
                         {
-                            ++x;
+                            x += 1;
                             num *= 10;
                             num += input[y][x] - '0';
                             positions.Add(new Position(x, y));
@@ -120,7 +120,7 @@ namespace AOC_23.Challenges
             return character is >= '0' and <= '9';
         }
 
-        private bool Close(Position p1, Position p2)
+        private static bool IsClose(Position p1, Position p2)
         {
             return Math.Abs(p1.Item1 - p2.Item1) <= 1 && Math.Abs(p1.Item2 - p2.Item2) <= 1;
         }
