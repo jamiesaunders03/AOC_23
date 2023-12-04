@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace AocHelper
+namespace AocHelper.Utilities
 {
     internal class WebHelper
     {
@@ -23,7 +23,7 @@ namespace AocHelper
             using var response = (HttpWebResponse)request.GetResponse();
             using Stream stream = response.GetResponseStream();
             using var reader = new StreamReader(stream);
-            
+
             return reader.ReadToEnd();
         }
     }

@@ -32,25 +32,24 @@ namespace AOC_23.Challenges
         private const char NON_SYMBOL = '.';
         private const char GEAR_SYMBOL = '*';
 
-        public void RunChallenge()
+        private readonly PartNumber[] _parts;
+        private readonly SymbolPosition[] _symbols;
+
+        public int Day => 3;
+
+        public Day3()
         {
             string[] input = new FetchData(3).ReadInput().TrimEnd().Split('\n');
-            (PartNumber[] parts, SymbolPosition[] symbols) = ParseInput(input);
-
-            int part1 = Challenge1(parts, symbols);
-            int part2 = Challenge2(parts, symbols);
-
-            Console.WriteLine($"Part 1: {part1}");
-            Console.WriteLine($"Part 2: {part2}");
+            (_parts, _symbols) = ParseInput(input);
         }
 
-        public int Challenge1(PartNumber[] partNumbers, SymbolPosition[] symbolPositions)
+        public string Challenge1()
         {
             int sum = 0;
 
-            foreach (PartNumber partNum in partNumbers)
+            foreach (PartNumber partNum in _parts)
             {
-                foreach (SymbolPosition symbol in symbolPositions)
+                foreach (SymbolPosition symbol in _symbols)
                 {
                     if (partNum.NumberPositions.Any(p => IsAdjacent(p, symbol.Position)))
                     {
@@ -60,23 +59,23 @@ namespace AOC_23.Challenges
                 }
             }
 
-            return sum;
+            return sum.ToString();
         }
 
-        public int Challenge2(PartNumber[] partNumbers, SymbolPosition[] symbolPositions)
+        public string Challenge2()
         {
             int sum = 0;
 
-            foreach (SymbolPosition symbol in symbolPositions.Where(s => s.Symbol == GEAR_SYMBOL))
+            foreach (SymbolPosition symbol in _symbols.Where(s => s.Symbol == GEAR_SYMBOL))
             {
-                PartNumber[] adjacent = partNumbers.Where(ps => ps.NumberPositions.Any(p => IsAdjacent(p, symbol.Position))).ToArray();
+                PartNumber[] adjacent = _parts.Where(ps => ps.NumberPositions.Any(p => IsAdjacent(p, symbol.Position))).ToArray();
                 if (adjacent.Length == 2)
                 {
                     sum += adjacent[0].Number * adjacent[1].Number;
                 }
             }
 
-            return sum;
+            return sum.ToString();
         }
 
         public static (PartNumber[], SymbolPosition[]) ParseInput(string[] input)

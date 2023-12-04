@@ -1,5 +1,4 @@
-﻿
-namespace AocHelper
+﻿namespace AocHelper.DataSources
 {
     internal interface IInputDataFetcher
     {
