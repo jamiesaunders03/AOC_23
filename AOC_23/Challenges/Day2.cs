@@ -41,7 +41,6 @@ namespace AOC_23.Challenges
         public void RunChallenge()
         {
             string[] input = new FetchData(2).ReadInput().TrimEnd().Split('\n');
-            // string[] input = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green\r\nGame 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue\r\nGame 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red\r\nGame 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red\r\nGame 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green".TrimEnd().Split('\n');
             Game[] games = ParseGame(input);
 
             int part1 = Challenge1(games);
@@ -107,25 +106,31 @@ namespace AOC_23.Challenges
                 Match match = _gameRegex.Match(input[i].TrimEnd());
                 int id = int.Parse(match.Groups[1].Value);
                 string rest = match.Groups[2].Value;
-
-                string[] groups = rest.Split(';');
-                int[,] colours = new int[groups.Length, 3];
-
-                for (int g = 0; g < groups.Length; ++g)
-                {
-                    string[] cols = groups[g].Split(", ");
-                    foreach (string colour in cols)
-                    {
-                        Match colMatch = _numColRegex.Match(colour);
-                        int index = _colPosition[colMatch.Groups[2].Value];
-                        colours[g, index] = int.Parse(colMatch.Groups[1].Value);
-                    }
-                }
+                int[,] colours = ParseColours(rest);
 
                 games[i] = new Game(id, colours);
             }
 
             return games;
+        }
+
+        private static int[,] ParseColours(string row)
+        {
+            string[] groups = row.Split(';');
+            int[,] colours = new int[groups.Length, 3];
+
+            for (int g = 0; g < groups.Length; ++g)
+            {
+                string[] cols = groups[g].Split(", ");
+                foreach (string colour in cols)
+                {
+                    Match colMatch = _numColRegex.Match(colour);
+                    int index = _colPosition[colMatch.Groups[2].Value];
+                    colours[g, index] = int.Parse(colMatch.Groups[1].Value);
+                }
+            }
+
+            return colours;
         }
     }
 }
