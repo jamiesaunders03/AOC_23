@@ -44,6 +44,7 @@ namespace AocHelper
         {
             _dataSources = new IInputDataFetcher[]
             {
+                new FileCacheSource(Year, Day),
                 new WebRequestData(Day, Year),
             };
         }
