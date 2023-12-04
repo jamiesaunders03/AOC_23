@@ -17,7 +17,6 @@ namespace AOC_23.Challenges
             ["8"] = 8,
             ["9"] = 9,
         };
-
         private static readonly Dictionary<string, int> _intStringValues = new(_intValues)
         {
             ["one"] = 1,
@@ -31,21 +30,19 @@ namespace AOC_23.Challenges
             ["nine"] = 9,
         };
 
-        public void RunChallenge()
+        private readonly string[] _lines;
+
+        public int Day => 1;
+
+        public Day1()
         {
-            string[] input = new FetchData(1).ReadInput().TrimEnd().Split('\n');
-
-            int part1 = Challenge1(input);
-            int part2 = Challenge2(input);
-
-            Console.WriteLine($"Part 1: {part1}");
-            Console.WriteLine($"Part 2: {part2}");
+            _lines = new FetchData(1).ReadInput().TrimEnd().Split('\n');
         }
 
-        internal int Challenge1(string[] lines)
+        public string Challenge1()
         {
             int total = 0;
-            foreach (string line in lines)
+            foreach (string line in _lines)
             {
                 int first = GetValue(line, _intValues, true);
                 int last = GetValue(line, _intValues, false);
@@ -53,13 +50,13 @@ namespace AOC_23.Challenges
                 total += first * 10 + last;
             }
 
-            return total;
+            return total.ToString();
         }
 
-        internal int Challenge2(string[] lines)
+        public string Challenge2()
         {
             int total = 0;
-            foreach (string line in lines)
+            foreach (string line in _lines)
             {
                 int first = GetValue(line, _intStringValues, true);
                 int last = GetValue(line, _intStringValues, false);
@@ -67,7 +64,7 @@ namespace AOC_23.Challenges
                 total += first * 10 + last;
             }
 
-            return total;
+            return total.ToString();
         }
 
         private static int GetValue(string seq, Dictionary<string, int> values, bool forwards)

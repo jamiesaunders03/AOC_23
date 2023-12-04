@@ -1,5 +1,4 @@
-﻿
-namespace AocHelper.DataSources
+﻿namespace AocHelper.DataSources
 {
     internal class WebRequestData : IInputDataFetcher
     {

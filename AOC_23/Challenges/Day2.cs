@@ -38,22 +38,20 @@ namespace AOC_23.Challenges
             ["blue"] = 2,
         };
 
-        public void RunChallenge()
+        private readonly Game[] _games;
+
+        public int Day => 2;
+
+        public Day2()
         {
             string[] input = new FetchData(2).ReadInput().TrimEnd().Split('\n');
-            Game[] games = ParseGame(input);
-
-            int part1 = Challenge1(games);
-            int part2 = Challenge2(games);
-
-            Console.WriteLine($"Part 1: {part1}");  // 2528
-            Console.WriteLine($"Part 2: {part2}");  // 67363
+            _games = ParseGame(input);
         }
 
-        private int Challenge1(Game[] games)
+        public string Challenge1()
         {
             int sum = 0;
-            foreach (Game g in games)
+            foreach (Game g in _games)
             {
                 bool isValidGame = true;
                 for (int group = 0; group < g.Colours.GetLength(0); ++group)
@@ -72,13 +70,13 @@ namespace AOC_23.Challenges
                     sum += g.Id;
             }
 
-            return sum;
+            return sum.ToString();
         }
 
-        private int Challenge2(Game[] games)
+        public string Challenge2()
         {
             int prod = 0;
-            foreach (Game g in games)
+            foreach (Game g in _games)
             {
                 int[] mins = new int[3];
                 for (int group = 0; group < g.Colours.GetLength(0); ++group)
@@ -95,7 +93,7 @@ namespace AOC_23.Challenges
                 prod += mins[0] * mins[1] * mins[2];
             }
 
-            return prod;
+            return prod.ToString();
         }
 
         private Game[] ParseGame(string[] input)

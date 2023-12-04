@@ -1,6 +1,5 @@
 ﻿
-using AOC_23;
+using AocHelper;
 using AOC_23.Challenges;
 
-IAocChallenge challenge = new Day4();
-challenge.RunChallenge();
+ChallengeRunner.RunChallenge<Day3>();
