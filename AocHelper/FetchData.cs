@@ -34,6 +34,7 @@ namespace AocHelper
                 if (result)
                 {
                     InputSave save = new(Year, Day);
+                    output = output.Replace("\r\n", "\n");
                     save.Save(output);
                     return output;
                 }
@@ -42,6 +43,17 @@ namespace AocHelper
             }
 
             throw new IOException("Unable to get input for challenge");
+        }
+
+        /// <summary>
+        /// Reads all data from a given file
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public string ReadInput(string fileName)
+        {
+            string path = Path.Join("../../../TestCases", fileName);
+            return File.ReadAllText(path).Replace("\r\n", "\n");
         }
 
         private void SetDataSources()
