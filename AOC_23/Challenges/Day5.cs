@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+
 using AocHelper;
 
 namespace AOC_23.Challenges
@@ -40,7 +39,7 @@ namespace AOC_23.Challenges
             public long Start { get; }
             public long Length { get; }
 
-            public Range(long start, int length)
+            public Range(long start, long length)
             {
                 Start = start;
                 Length = length;
@@ -50,8 +49,8 @@ namespace AOC_23.Challenges
         private static readonly Regex _seedsRe = new(@"seeds: ([\d ]+)");
         private static readonly Regex _sourceDestRe = new(@"(\w+)-to-(\w+) map:");
 
-        private List<long> _seeds;
-        private List<Mapping> _mappings;
+        private readonly List<long> _seeds;
+        private readonly List<Mapping> _mappings;
 
         public int Day => 5;
 
@@ -83,7 +82,7 @@ namespace AOC_23.Challenges
         {
             var seeds = new List<Range>();
             for (int i = 0; i < _seeds.Count; i += 2)
-                seeds.Add(new Range(_seeds[i], (int)_seeds[i + 1]));
+                seeds.Add(new Range(_seeds[i], _seeds[i + 1]));
 
             foreach (Mapping map in _mappings)
             {
@@ -104,6 +103,11 @@ namespace AOC_23.Challenges
             }
 
             return num;
+        }
+
+        private static List<Range> ApplyMapToRange(Range r, Mapping map)
+        {
+            return null;
         }
 
         private static List<long> GetSeeds(IEnumerator<string> enumerator)
