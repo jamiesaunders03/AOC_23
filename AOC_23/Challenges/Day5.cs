@@ -8,15 +8,15 @@ namespace AOC_23.Challenges
     {
         internal readonly struct Transformation
         {
-            public long ValueStart { get; }
-            public long RangeStart { get; }
-            public long RangeLength { get; }
+            public long Dest { get; }
+            public long Start { get; }
+            public long Length { get; }
 
-            public Transformation(long valueStart, long rangeStart, long rangeLength)
+            public Transformation(long dest, long start, long length)
             {
-                ValueStart = valueStart;
-                RangeStart = rangeStart;
-                RangeLength = rangeLength;
+                Dest = dest;
+                Start = start;
+                Length = length;
             }
         }
 
@@ -86,19 +86,25 @@ namespace AOC_23.Challenges
 
             foreach (Mapping map in _mappings)
             {
-                // seeds = seeds.Select(num => ApplyMap(num, map)).ToList();
+                var newSeeds = new List<Range>();
+                foreach (Range seedRange in seeds)
+                {
+                    newSeeds.AddRange(ApplyMapToRange(seedRange, map));
+                }
+
+                seeds = newSeeds;
             }
 
-            return seeds.Min().ToString();
+            return seeds.Min(r => r.Start).ToString();
         }
 
         private static long ApplyMap(long num, Mapping map)
         {
             foreach (Transformation t in map.Transformations)
             {
-                if (t.RangeStart <= num && num < t.RangeStart + t.RangeLength)
+                if (t.Start <= num && num < t.Start + t.Length)
                 {
-                    return t.ValueStart + (num - t.RangeStart);
+                    return t.Dest + (num - t.Start);
                 }
             }
 
@@ -107,7 +113,54 @@ namespace AOC_23.Challenges
 
         private static List<Range> ApplyMapToRange(Range r, Mapping map)
         {
-            return null;
+            List<Range> newSeeds = new();
+            // Areas that overlap, used to work out what ranges are unmapped and therefor unchanged after all other mapping are applied
+            List<Range> intersections = new();
+            foreach (Transformation t in map.Transformations)
+            {
+                // Ranges have no overlap
+                if (r.Start > t.Start + t.Length || t.Start > r.Start + r.Length)  
+                {
+                    continue;
+                }
+
+                // Get overlapping range
+                long rangeStart = Math.Max(r.Start, t.Start);
+                long rangeEnd = Math.Min(r.Start + r.Length, t.Start + t.Length);
+                long length = rangeEnd - rangeStart;
+
+                // How much to shift range by
+                long offset = t.Dest - t.Start;
+                newSeeds.Add(new Range(rangeStart + offset, length));
+                intersections.Add(new Range(rangeStart, length));
+            }
+
+            // Sort intersections to iterate through and fid the gaps between
+            intersections.Sort((r1, r2) => r1.Start.CompareTo(r2.Start));
+            
+            long current = r.Start;
+            long end = r.Start + r.Length - 1;
+            int index = 0;
+
+            // Leading part of range and gaps between mapped areas
+            while (current < end && index < intersections.Count)
+            {
+                if (current < intersections[index].Start)
+                {
+                    long range = intersections[index].Start - current;
+                    newSeeds.Add(new Range(current, range));
+                }
+                current = intersections[index].Start + intersections[index].Length;
+                ++index;
+            }
+
+            // Account for any trailing unmapped part of the range
+            if (current < end)
+            {
+                newSeeds.Add(new Range(current, end - current + 1));
+            }
+
+            return newSeeds;
         }
 
         private static List<long> GetSeeds(IEnumerator<string> enumerator)
