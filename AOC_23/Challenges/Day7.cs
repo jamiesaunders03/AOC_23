@@ -10,7 +10,10 @@ namespace AOC_23.Challenges
         {
             public string Hand { get; }
             public int Value { get; }
+
+            // Storage of cart type
             public int CardType { get; }
+            // Storage of card type when 'J' is the joker
             public int CardTypeWithJoker { get; }
 
             public CardScores(string hand, int value)
@@ -26,9 +29,9 @@ namespace AOC_23.Challenges
 
         private const string CARD_ORDER = "AKQJT98765432";
         private const string CARD_ORDER_WITH_JOKER = "AKQT98765432J";
-        private static  int _nCardValues = CARD_ORDER.Length;
+        private static readonly int _nCardValues = CARD_ORDER.Length;
         private static readonly Regex _cardRe = new(@"(\w+) (\d+)");
-        private CardScores[] _cardScores;
+        private readonly CardScores[] _cardScores;
 
         public Day7()
         {
@@ -74,7 +77,7 @@ namespace AOC_23.Challenges
                 ++multiplier;
             }
 
-            return sum.ToString();  // 251224871 too high
+            return sum.ToString();
         }
 
         private int Compare(CardScores a, CardScores b)
@@ -86,17 +89,7 @@ namespace AOC_23.Challenges
             if (compare != 0)
                 return compare;
 
-            for (int i = 0; i < a.Hand.Length; ++i)
-            {
-                int val1 = CARD_ORDER.IndexOf(a.Hand[i]);
-                int val2 = CARD_ORDER.IndexOf(b.Hand[i]);
-
-                compare = -val1.CompareTo(val2);
-                if (compare != 0) 
-                    return compare;
-            }
-
-            throw new Exception();
+            return CompareStringsWithMapping(a.Hand, b.Hand, CARD_ORDER);
         }
 
         private int CompareWithJoker(CardScores a, CardScores b)
@@ -108,12 +101,17 @@ namespace AOC_23.Challenges
             if (compare != 0)
                 return compare;
 
-            for (int i = 0; i < a.Hand.Length; ++i)
-            {
-                int val1 = CARD_ORDER_WITH_JOKER.IndexOf(a.Hand[i]);
-                int val2 = CARD_ORDER_WITH_JOKER.IndexOf(b.Hand[i]);
+            return CompareStringsWithMapping(a.Hand, b.Hand, CARD_ORDER_WITH_JOKER);
+        }
 
-                compare = -val1.CompareTo(val2);
+        private static int CompareStringsWithMapping(string a, string b, string mapping)
+        {
+            for (int i = 0; i < a.Length; ++i)
+            {
+                int val1 = mapping.IndexOf(a[i]);
+                int val2 = mapping.IndexOf(b[i]);
+
+                int compare = -val1.CompareTo(val2);
                 if (compare != 0)
                     return compare;
             }
@@ -129,16 +127,7 @@ namespace AOC_23.Challenges
 
             appearances.Sort();
 
-            if (appearances[^1] == 5)
-                return 7;
-            else if (appearances[^1] == 4)
-                return 6;
-            else if (appearances[^1] == 3)
-                return appearances[^2] == 2 ? 5 : 4;
-            else if (appearances[^1] == 2)
-                return appearances[^2] == 2 ? 3 : 2;
-            else
-                return 1;
+            return GetCardTypeFromMaxes(appearances[^1], appearances[^2]);
         }
 
         private static int GetCardTypeWithJoker(string card)
@@ -155,32 +144,37 @@ namespace AOC_23.Challenges
 
             int max1;
             int max2;
-            if (jokerIndex == 0)
+            switch (jokerIndex)
             {
-                max1 = appearanceCounts[1] + appearanceCounts[jokerIndex];
-                max2 = appearanceCounts[2];
-            }
-            else if (jokerIndex == 1)
-            {
-                max1 = appearanceCounts[0] + appearanceCounts[jokerIndex];
-                max2 = appearanceCounts[2];
-            }
-            else
-            {
-                max1 = appearanceCounts[0] + appearanceCounts[jokerIndex];
-                max2 = appearanceCounts[1];
+                case 0:
+                    max1 = appearanceCounts[1] + appearanceCounts[jokerIndex];
+                    max2 = appearanceCounts[2];
+                    break;
+                case 1:
+                    max1 = appearanceCounts[0] + appearanceCounts[jokerIndex];
+                    max2 = appearanceCounts[2];
+                    break;
+                default:
+                    max1 = appearanceCounts[0] + appearanceCounts[jokerIndex];
+                    max2 = appearanceCounts[1];
+                    break;
             }
 
-            if (max1 == 5)
-                return 7;
-            else if (max1 == 4)
-                return 6;
-            else if (max1 == 3)
-                return max2 == 2 ? 5 : 4;
-            else if (max1 == 2)
-                return max2 == 2 ? 3 : 2;
-            else
-                return 1;
+            return GetCardTypeFromMaxes(max1, max2);
+        }
+
+        private static int GetCardTypeFromMaxes(int max, int secondMax)
+        {
+            return (new[] { max, secondMax }) switch
+            {
+                [5, _] => 7,
+                [4, _] => 6,
+                [3, 2] => 5,
+                [3, _] => 4,
+                [2, 2] => 3,
+                [2, _] => 2,
+                _ => 1,
+            };
         }
     }
 }
