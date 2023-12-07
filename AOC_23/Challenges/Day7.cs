@@ -18,7 +18,7 @@ namespace AOC_23.Challenges
                 Hand = hand;
                 Value = value;
                 CardType = GetCardType(hand);
-                CardType = GetCardTypeWithJoker(hand);
+                CardTypeWithJoker = GetCardTypeWithJoker(hand);
             }
         }
 
@@ -74,7 +74,7 @@ namespace AOC_23.Challenges
                 ++multiplier;
             }
 
-            return sum.ToString();  // 257254797 too high
+            return sum.ToString();  // 251224871 too high
         }
 
         private int Compare(CardScores a, CardScores b)
@@ -143,20 +143,42 @@ namespace AOC_23.Challenges
 
         private static int GetCardTypeWithJoker(string card)
         {
-            List<int> appearances = new List<int>(new int[_nCardValues]);
+            var appearances = CARD_ORDER_WITH_JOKER.ToDictionary(k => k, k => 0);
             foreach (char c in card)
-                appearances[CARD_ORDER.IndexOf(c)] += 1;
+                appearances[c] += 1;
 
-            appearances.Sort();
+            List<Tuple<char, int>> appearanceArray = appearances.Select(i => new Tuple<char, int>(i.Key, i.Value)).ToList();
+            appearanceArray.Sort((i1, i2) => -i1.Item2.CompareTo(i2.Item2));
 
-            if (appearances[^1] == 5)
+            int jokerIndex = appearanceArray.Select(i => i.Item1).ToList().IndexOf('J');
+            int[] appearanceCounts = appearanceArray.Select(t => t.Item2).ToArray();
+
+            int max1;
+            int max2;
+            if (jokerIndex == 0)
+            {
+                max1 = appearanceCounts[1] + appearanceCounts[jokerIndex];
+                max2 = appearanceCounts[2];
+            }
+            else if (jokerIndex == 1)
+            {
+                max1 = appearanceCounts[0] + appearanceCounts[jokerIndex];
+                max2 = appearanceCounts[2];
+            }
+            else
+            {
+                max1 = appearanceCounts[0] + appearanceCounts[jokerIndex];
+                max2 = appearanceCounts[1];
+            }
+
+            if (max1 == 5)
                 return 7;
-            else if (appearances[^1] == 4)
+            else if (max1 == 4)
                 return 6;
-            else if (appearances[^1] == 3)
-                return appearances[^2] == 2 ? 5 : 4;
-            else if (appearances[^1] == 2)
-                return appearances[^2] == 2 ? 3 : 2;
+            else if (max1 == 3)
+                return max2 == 2 ? 5 : 4;
+            else if (max1 == 2)
+                return max2 == 2 ? 3 : 2;
             else
                 return 1;
         }
