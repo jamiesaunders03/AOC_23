@@ -74,7 +74,7 @@ namespace AOC_23.Challenges
                 ++multiplier;
             }
 
-            return sum.ToString();
+            return sum.ToString();  // 257254797 too high
         }
 
         private int Compare(CardScores a, CardScores b)
@@ -110,8 +110,8 @@ namespace AOC_23.Challenges
 
             for (int i = 0; i < a.Hand.Length; ++i)
             {
-                int val1 = CARD_ORDER.IndexOf(a.Hand[i]);
-                int val2 = CARD_ORDER.IndexOf(b.Hand[i]);
+                int val1 = CARD_ORDER_WITH_JOKER.IndexOf(a.Hand[i]);
+                int val2 = CARD_ORDER_WITH_JOKER.IndexOf(b.Hand[i]);
 
                 compare = -val1.CompareTo(val2);
                 if (compare != 0)
