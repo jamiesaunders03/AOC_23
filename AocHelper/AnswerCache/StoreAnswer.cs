@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using Newtonsoft.Json.Linq;
+
+using AocHelper.Utilities;
 
 namespace AocHelper.AnswerCache
 {
@@ -16,14 +15,44 @@ namespace AocHelper.AnswerCache
         /// <param name="day">The day of challenge</param>
         /// <param name="year">The year of challenge</param>
         /// <returns>Whether a change was made to the file</returns>
-        public static bool SaveAnswer(string answer, AnswerState state, int day, int year)
+        public static bool SaveAnswer(string answer, IAnswerState state, int day, int year)
         {
-            return false;
+            string path = GetFilePath(year, day);
+            CreateDir(path);
+
+            dynamic json = JsonReader.ReadFile(path);
+            string[] current = json[state.Description];
+            if (current == null || state.ShouldAddValue(answer, current))
+                return false;
+
+            switch (state.AnswerType)
+            {
+                
+            }
+
+            return true;
         }
 
         private static string GetFilePath(int year, int day)
         {
-            return "";
+            string path = Path.Combine(Constants.StartupPath, Constants.ANSWERS_CACHE_PATH);
+            return string.Format(path, year, day);
+        }
+
+        private static void CreateDir(string path)
+        {
+            string[] parts = path.Split('/');
+            string dir = string.Join("\\", parts.SkipLast(1));
+
+            try
+            {
+                Directory.CreateDirectory(dir);
+                if (!File.Exists(path))
+                {
+                    File.Create(path);
+                }
+            }
+            catch (IOException) { }
         }
     }
 }

@@ -2,18 +2,32 @@
 
 namespace AocHelper.AnswerCache
 {
-    public enum AnswerState
+    public enum AnswerStateType
     {
-        [Description("The given answer is too high")]
-        TOO_HIGH,
-        [Description("The given answer is too low")]
-        TOO_LOW,
-        [Description("The answer is close to the correct value, but not right")]
-        CLOSE,
-        [Description("The correct answer")]
-        CORRECT,
-        // For non-numeric answers
-        [Description("The given answer is not correct")]
-        INCORRECT,
+        [Description("Multiple values can be used")]
+        ADDITIVE,
+        [Description("Only 1 value")]
+        SINGLE,
+    }
+
+    public interface IAnswerState
+    {
+        /// <summary>
+        /// The JSON key of this answer state
+        /// </summary>
+        string Description { get; }
+
+        /// <summary>
+        /// How to add values
+        /// </summary>
+        AnswerStateType AnswerType { get; }
+
+        /// <summary>
+        /// Whether the value should be added / updated
+        /// </summary>
+        /// <param name="newValue">The new value to consider</param>
+        /// <param name="existingValues">The existing value(s)</param>
+        /// <returns></returns>
+        public bool ShouldAddValue(string newValue, string[] existingValues);
     }
 }
