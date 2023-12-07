@@ -1,7 +1,9 @@
 ﻿
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json.Linq;
-
-using AocHelper.Utilities;
+using Newtonsoft.Json;
+using JsonReader = AocHelper.Utilities.JsonReader;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AocHelper.AnswerCache
 {
@@ -22,13 +24,24 @@ namespace AocHelper.AnswerCache
 
             dynamic json = JsonReader.ReadFile(path);
             string[] current = json[state.Description];
-            if (current == null || state.ShouldAddValue(answer, current))
+            if (current != null && !state.ShouldAddValue(answer, current))
                 return false;
 
+            current ??= Array.Empty<string>();
             switch (state.AnswerType)
             {
-                
+                case AnswerStateType.ADDITIVE:
+                    json[state.Description] = new List<string>(current) { answer };
+                    break;
+                case AnswerStateType.SINGLE:
+                    json[state.Description] = answer;
+                    break;
+                default:
+                    throw new NotImplementedException("Unknown Answer State");
             }
+
+            string jsonString = JsonSerializer.Serialize(json);
+            File.WriteAllText(path, jsonString);
 
             return true;
         }
