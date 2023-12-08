@@ -1,4 +1,6 @@
-﻿using AocHelper;
+﻿using System.Text.RegularExpressions;
+using AocHelper;
+using AocHelper.Utilities;
 
 namespace AOC_23.Challenges
 {
@@ -33,22 +35,80 @@ namespace AOC_23.Challenges
 
         public int Day => 8;
 
-        private string _directions;
+        private static readonly Regex _directionRe = new(@"(\w+) = \((\w+), (\w+)\)");
+
+        // Instructions
+        private readonly string _directions;
+        // Map of all paths
+        private readonly Dictionary<string, Navigation> _routes;
 
         public Day8()
         {
             string[] input = new FetchData(Day).ReadInput().TrimEnd().Split("\n");
             _directions = input[0];
+            _routes = new Dictionary<string, Navigation>();
+
+            Match[] matches = input.Skip(2).Select(s => _directionRe.Match(s)).ToArray();
+
+            foreach (Match m in matches)
+            {
+                string name = m.Groups[1].Value;
+                _routes[name] = new Navigation(name);
+            }
+
+            foreach (Match m in matches)
+            {
+                string name = m.Groups[1].Value;
+                string left = m.Groups[2].Value;
+                string right = m.Groups[3].Value;
+
+                _routes[name].Left = _routes[left];
+                _routes[name].Right = _routes[right];
+            }
         }
 
         public string Challenge1()
         {
-            throw new NotImplementedException();
+            Navigation current = _routes["AAA"];
+            int steps = 0;
+            while (current.Name != "ZZZ")
+            {
+                int index = steps % _directions.Length;
+                char direction = _directions[index];
+
+                current = direction == 'L' ? current.Left : current.Right;
+                steps++;
+            }
+
+            return steps.ToString();
         }
 
         public string Challenge2()
         {
-            throw new NotImplementedException();
+            Navigation[] allNodes = _routes.Where(k => k.Key[^1] == 'A').Select(v => v.Value).ToArray();
+            int[] stepsArray = new int[allNodes.Length];
+
+            // Compute period of each route
+            for (int i = 0; i < stepsArray.Length; i++)
+            {
+                Navigation current = allNodes[i];
+                int steps = 0;
+                while (current.Name[^1] != 'Z')
+                {
+                    int index = steps % _directions.Length;
+                    char direction = _directions[index];
+
+                    current = direction == 'L' ? current.Left : current.Right;
+                    steps++;
+                }
+
+                stepsArray[i] = steps;
+            }
+
+            // Fold LCM on to array
+            long arrSteps = stepsArray.Aggregate(1L, (current, num) => Utilities.Lcm(current, num));
+
+            return arrSteps.ToString();
         }
     }
 }
