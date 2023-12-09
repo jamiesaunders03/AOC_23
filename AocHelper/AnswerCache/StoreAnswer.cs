@@ -34,7 +34,7 @@ namespace AocHelper.AnswerCache
                     json[state.Description] = new List<string>(current) { answer };
                     break;
                 case AnswerStateType.SINGLE:
-                    json[state.Description] = answer;
+                    json[state.Description] = new List<string> { answer };
                     break;
                 default:
                     throw new NotImplementedException("Unknown Answer State");
