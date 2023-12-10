@@ -71,29 +71,27 @@ namespace AOC_23.Challenges
 
         public string Challenge1()
         {
-            int[,] distances = new int[_directions.GetLength(0), _directions.GetLength(1)];
-            distances.Fill(int.MaxValue);
-            distances[_startPosition.Y, _startPosition.X] = 0;
+            bool[,] distances = new bool[_directions.GetLength(0), _directions.GetLength(1)];
+            distances[_startPosition.Y, _startPosition.X] = true;
 
             List<Vector2> reviewPositions = new() { _startPosition };
             while (reviewPositions.Count != 0)
             {
                 Vector2 currentPos = reviewPositions[0];
-                int currentVal = distances[currentPos.Y, currentPos.X];
                 reviewPositions.RemoveAt(0);
 
                 foreach ((Vector2, byte) dir in _dirs)
                 {
                     Vector2 next = currentPos + dir.Item1;
-                    if (Connected(currentPos, next, dir.Item2) && distances[next.Y, next.X] > currentVal)
+                    if (IsConnected(currentPos, next, dir.Item2) && !Utilities.VectorIndex(distances, next))
                     {
-                        distances[next.Y, next.X] = currentVal + 1;
+                        distances[next.Y, next.X] = true;
                         reviewPositions.Add(next);
                     }
                 }
             }
 
-            int maxDist = distances.ToEnumerable().Where(n => n != int.MaxValue).Max();
+            int maxDist = distances.ToEnumerable().Count(x => x) / 2;
             return maxDist.ToString();
         }
 
@@ -102,14 +100,14 @@ namespace AOC_23.Challenges
             throw new NotImplementedException();
         }
 
-        private bool Connected(Vector2 current, Vector2 next, byte direction)
+        private bool IsConnected(Vector2 current, Vector2 next, byte direction)
         {
             // Not in bounds
             if (next.X < 0 || next.Y < 0 || next.X >= _directions.GetLength(1) || next.Y >= _directions.GetLength(0))
                 return false;
 
-            Direction currentDir = _directions[current.Y, current.X];
-            Direction nextDir = _directions[next.Y, next.X];
+            Direction currentDir = Utilities.VectorIndex(_directions, current);
+            Direction nextDir = Utilities.VectorIndex(_directions, next);
 
             byte currentSymbol = _posConnections[currentDir.Symbol];
             byte nextSymbol = _posConnections[nextDir.Symbol];
