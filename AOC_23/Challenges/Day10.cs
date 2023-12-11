@@ -59,7 +59,7 @@ namespace AOC_23.Challenges
 
         public Day10()
         {
-            string[] input = new FetchData(Day).ReadInput("Day10Part2a.txt").TrimEnd().Split('\n');
+            string[] input = new FetchData(Day).ReadInput("Day10Part2d.txt").TrimEnd().Split('\n');
             _directions = new Direction[input.Length, input[0].Length];
 
             for (int row = 0; row < input.Length; row++)
@@ -80,6 +80,7 @@ namespace AOC_23.Challenges
         public string Challenge2()
         {
             int[,] mazePath = GetMazePath();
+            int maxDiff = mazePath.ToEnumerable().Where(x => x != int.MaxValue).Max();
             int[,] groups = new int[mazePath.GetLength(0), mazePath.GetLength(1)];
 
             for (int i = 0; i < groups.GetLength(0); ++i)
@@ -87,12 +88,15 @@ namespace AOC_23.Challenges
                 bool inPipe = false;
                 for (int j = 0; j < groups.GetLength(1); ++j)
                 {
-                    if (mazePath[i, j] != int.MaxValue && (j == 0 || Math.Abs(mazePath[i, j] - mazePath[i, j - 1]) != 1))
+                    if (j < groups.GetLength(1) - 1 && (Math.Abs(mazePath[i, j] - mazePath[i, j + 1]) == 1 || Math.Abs(mazePath[i, j] - mazePath[i, j + 1]) == maxDiff))
+                        inPipe = false;
+                    else if (mazePath[i, j] != int.MaxValue)
                         inPipe = !inPipe;
                     else if (inPipe)
                         groups[i, j]++;
                 }
             }
+
             Utilities.PrintGrid(groups, i => i == 1 ? '#' : '.');
             Console.WriteLine();
 
@@ -101,7 +105,9 @@ namespace AOC_23.Challenges
                 bool inPipe = false;
                 for (int i = 0; i < groups.GetLength(0); ++i)
                 {
-                    if (mazePath[i, j] != int.MaxValue && (i == 0 || Math.Abs(mazePath[i, j] - mazePath[i - 1, j]) != 1))
+                    if (i < groups.GetLength(0) - 1 && (Math.Abs(mazePath[i, j] - mazePath[i + 1, j]) == 1 || Math.Abs(mazePath[i, j] - mazePath[i + 1, j]) == maxDiff))
+                        inPipe = false;
+                    else if (mazePath[i, j] != int.MaxValue)
                         inPipe = !inPipe;
                     else if (inPipe)
                         groups[i, j]++;
