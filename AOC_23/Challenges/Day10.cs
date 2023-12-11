@@ -21,12 +21,14 @@ namespace AOC_23.Challenges
         private const byte EAST = 0b0100;
         private const byte SOUTH = 0b0010;
         private const byte WEST = 0b0001;
+        private const byte HORIZONTAL = EAST | WEST;
+        private const byte VERTICAL = NORTH | SOUTH;
 
         // NESW byte array
         private static readonly Dictionary<char, byte> _posConnections = new()
         {
-            ['|'] = NORTH | SOUTH,
-            ['-'] = EAST | WEST,
+            ['|'] = VERTICAL,
+            ['-'] = HORIZONTAL,
             ['L'] = NORTH | EAST,
             ['J'] = NORTH | WEST,
             ['7'] = SOUTH | WEST,
@@ -59,7 +61,7 @@ namespace AOC_23.Challenges
 
         public Day10()
         {
-            string[] input = new FetchData(Day).ReadInput("Day10Part2d.txt").TrimEnd().Split('\n');
+            string[] input = new FetchData(Day).ReadInput().TrimEnd().Split('\n');
             _directions = new Direction[input.Length, input[0].Length];
 
             for (int row = 0; row < input.Length; row++)
@@ -80,43 +82,72 @@ namespace AOC_23.Challenges
         public string Challenge2()
         {
             int[,] mazePath = GetMazePath();
-            int maxDiff = mazePath.ToEnumerable().Where(x => x != int.MaxValue).Max();
             int[,] groups = new int[mazePath.GetLength(0), mazePath.GetLength(1)];
 
             for (int i = 0; i < groups.GetLength(0); ++i)
             {
                 bool inPipe = false;
+                int ridingPipe = 0;
                 for (int j = 0; j < groups.GetLength(1); ++j)
                 {
-                    if (j < groups.GetLength(1) - 1 && (Math.Abs(mazePath[i, j] - mazePath[i, j + 1]) == 1 || Math.Abs(mazePath[i, j] - mazePath[i, j + 1]) == maxDiff))
-                        inPipe = false;
-                    else if (mazePath[i, j] != int.MaxValue)
+                    if (mazePath[i, j] == _posConnections['|'])  // Cross vertical pipe, invert
+                    {
                         inPipe = !inPipe;
-                    else if (inPipe)
+                    }  
+                    else if (mazePath[i, j] != int.MaxValue && (mazePath[i, j] & VERTICAL) != 0) // On horizontal pipe, do nothing
+                    {
+                        if (ridingPipe == 0)
+                        {
+                            ridingPipe = mazePath[i, j] & VERTICAL;
+                        }
+                        else
+                        {
+                            if (ridingPipe != (mazePath[i, j] & VERTICAL))
+                            {
+                                inPipe = !inPipe;
+                            }
+                            ridingPipe = 0;
+                        }
+                    }
+                    else if (inPipe && ridingPipe == 0)
+                    {
                         groups[i, j]++;
+                    }
                 }
             }
-
-            Utilities.PrintGrid(groups, i => i == 1 ? '#' : '.');
-            Console.WriteLine();
 
             for (int j = 0; j < groups.GetLength(1); ++j)
             {
                 bool inPipe = false;
+                int ridingPipe = 0;
                 for (int i = 0; i < groups.GetLength(0); ++i)
                 {
-                    if (i < groups.GetLength(0) - 1 && (Math.Abs(mazePath[i, j] - mazePath[i + 1, j]) == 1 || Math.Abs(mazePath[i, j] - mazePath[i + 1, j]) == maxDiff))
-                        inPipe = false;
-                    else if (mazePath[i, j] != int.MaxValue)
+                    if (mazePath[i, j] == _posConnections['-']) // Cross horizontal pipe, invert
+                    {
                         inPipe = !inPipe;
+                    }
+                    else if (mazePath[i, j] != int.MaxValue && (mazePath[i, j] & HORIZONTAL) != 0)  // On horizontal pipe, do nothing
+                    {
+                        if (ridingPipe == 0)
+                        {
+                            ridingPipe = mazePath[i, j] & HORIZONTAL;
+                        }
+                        else
+                        {
+                            if (ridingPipe != (mazePath[i, j] & HORIZONTAL))
+                                inPipe = !inPipe;
+                            ridingPipe = 0;
+                        }
+                    }
                     else if (inPipe)
+                    {
                         groups[i, j]++;
+                    }
                 }
             }
 
-            Utilities.PrintGrid(groups, i => i == 2 ? '#' : '.');
             int inside = groups.ToEnumerable().Count(x => x == 2);
-            return inside.ToString();  // 2213 too high
+            return inside.ToString();
         }
 
         /// <summary>
@@ -140,12 +171,24 @@ namespace AOC_23.Challenges
                     Vector2 next = currentPos + dir.Item1;
                     if (IsConnected(currentPos, next, dir.Item2) && Utilities.VectorIndex(mazePath, next) == int.MaxValue)
                     {
-                        mazePath[next.Y, next.X] = mazePath[currentPos.Y, currentPos.X] + 1;
+                        mazePath[next.Y, next.X] = _posConnections[_directions[next.Y, next.X].Symbol];
                         reviewPositions.Add(next);
                         break;
                     }
                 }
             }
+
+            int startVal = 0;
+            if (_startPosition.Y < 0 && mazePath[_startPosition.Y - 1, _startPosition.X] != int.MaxValue)
+                startVal |= NORTH;
+            if (_startPosition.X < _directions.GetLength(1) - 1 && mazePath[_startPosition.Y, _startPosition.X + 1] != int.MaxValue)
+                startVal |= EAST;
+            if (_startPosition.Y < _directions.GetLength(0) - 1 && mazePath[_startPosition.Y + 1, _startPosition.X] != int.MaxValue)
+                startVal |= SOUTH;
+            if (_startPosition.X > 0 && mazePath[_startPosition.Y, _startPosition.X - 1] != int.MaxValue)
+                startVal |= WEST;
+
+            mazePath[_startPosition.Y, _startPosition.X] = startVal;
 
             return mazePath;
         }
