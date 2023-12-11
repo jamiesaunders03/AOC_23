@@ -57,44 +57,18 @@ namespace AOC_23.Challenges
                     emptyCols.Add(j);
             }
 
-            for (int i = 0; i < space.Length; ++i)
+            foreach (((int i, int j), char c) in Enumeration.EnumerateArray(space))
             {
-                for (int j = 0; j < space[i].Length; j++)
+                if (c == GALAXY)
                 {
-                    if (space[i][j] == GALAXY)
-                    {
-                        int iOffset = emptyRows.Count(v => i >= v) * (sep - 1);
-                        int jOffset = emptyCols.Count(v => j >= v) * (sep - 1);
+                    int iOffset = emptyRows.Count(v => i >= v) * (sep - 1);
+                    int jOffset = emptyCols.Count(v => j >= v) * (sep - 1);
 
-                        galaxies.Add(new Vector2(j + jOffset, i + iOffset));
-                    }
+                    galaxies.Add(new Vector2(j + jOffset, i + iOffset));
                 }
             }
 
             return galaxies;
         }
-
-/*
-        private static void AddExpansions(List<string> input)
-        {
-            for (int i = 0; i < input.Count; i++)
-            {
-                string row = input[i];
-                if (row.All(c => c != '#'))
-                {
-                    input.Insert(i, row);
-                    ++i;
-                }
-            }
-
-            for (int j = 0; j < input[0].Length; j++)
-            {
-                if (row.All(c => c != '#'))
-                {
-                    input.Insert(i, row);
-                    ++i;
-                }
-            }
-        }*/
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using AocHelper;
-using AocHelper.Utilities;
 
 namespace AOC_23.Challenges
 {
@@ -106,7 +105,7 @@ namespace AOC_23.Challenges
             }
 
             // Fold LCM on to array
-            long arrSteps = stepsArray.Aggregate(1L, (current, num) => Utilities.Lcm(current, num));
+            long arrSteps = stepsArray.Aggregate(1L, (current, num) => AocHelper.Utilities.Math.Lcm(current, num));
 
             return arrSteps.ToString();
         }

@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace AocHelper.Utilities
 {
     public class Vector2
@@ -39,7 +41,7 @@ namespace AocHelper.Utilities
         /// <returns></returns>
         public double Abs()
         {
-            return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+            return System.Math.Sqrt(System.Math.Pow(X, 2) + System.Math.Pow(Y, 2));
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace AocHelper.Utilities
         /// <returns></returns>
         public double Euclidean(Vector2 v)
         {
-            return Math.Sqrt(Math.Pow(X - v.X, 2) + Math.Pow(Y - v.Y, 2));
+            return System.Math.Sqrt(System.Math.Pow(X - v.X, 2) + System.Math.Pow(Y - v.Y, 2));
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace AocHelper.Utilities
         /// <returns></returns>
         public int Manhattan(Vector2 v)
         {
-            return Math.Abs(X - v.X) + Math.Abs(Y - v.Y);
+            return System.Math.Abs(X - v.X) + System.Math.Abs(Y - v.Y);
         }
 
         /// <summary>
@@ -69,7 +71,7 @@ namespace AocHelper.Utilities
         /// <returns></returns>
         public int MaxDimDistance(Vector2 v)
         {
-            return Math.Max(Math.Abs(X - v.X), Math.Abs(Y - v.Y));
+            return System.Math.Max(System.Math.Abs(X - v.X), System.Math.Abs(Y - v.Y));
         }
 
         /// <summary>

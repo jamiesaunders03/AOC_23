@@ -9,28 +9,6 @@ namespace AocHelper.Utilities
     public static class Utilities
     {
         /// <summary>
-        /// Computes the LCM of 2 numbers
-        /// </summary>
-        /// <param name="n1">The first number</param>
-        /// <param name="n2">The second number</param>
-        /// <returns></returns>
-        public static long Lcm(long n1, long n2)
-        {
-            long c1 = n1;
-            long c2 = n2;
-
-            while (c1 != c2)
-            {
-                if (c1 < c2)
-                    c1 += n1;
-                else 
-                    c2 += n2;
-            }
-
-            return c1;
-        }
-
-        /// <summary>
         /// Indexes a 2d array using a vector
         /// </summary>
         /// <param name="arr">The array to index</param>
@@ -41,18 +19,11 @@ namespace AocHelper.Utilities
             return arr[vec.Y, vec.X];
         }
 
-        public static void PrintGrid<T>(T[,] vals)
-        {
-            for (int i = 0; i < vals.GetLength(0); ++i)
-            {
-                for (int j = 0; j < vals.GetLength(1); ++j)
-                {
-                    Console.Write(vals[i, j]);
-                }
-                Console.WriteLine();
-            }
-        }
-
+        /// <summary>
+        /// Prints a 2d array to the console
+        /// </summary>
+        /// <param name="vals">The array to print</param>
+        /// <param name="map">How each elem should be displayed</param>
         public static void PrintGrid<T>(T[,] vals, Func<T, char> map)
         {
             for (int i = 0; i < vals.GetLength(0); ++i)
