@@ -40,5 +40,29 @@ namespace AocHelper.Utilities
         {
             return arr[vec.Y, vec.X];
         }
+
+        public static void PrintGrid<T>(T[,] vals)
+        {
+            for (int i = 0; i < vals.GetLength(0); ++i)
+            {
+                for (int j = 0; j < vals.GetLength(1); ++j)
+                {
+                    Console.Write(vals[i, j]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public static void PrintGrid<T>(T[,] vals, Func<T, char> map)
+        {
+            for (int i = 0; i < vals.GetLength(0); ++i)
+            {
+                for (int j = 0; j < vals.GetLength(1); ++j)
+                {
+                    Console.Write(map(vals[i, j]));
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }
