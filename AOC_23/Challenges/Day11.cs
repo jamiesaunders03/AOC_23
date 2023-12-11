@@ -18,11 +18,7 @@ namespace AOC_23.Challenges
         public string Challenge1()
         {
             List<Vector2> galaxies = GetGalaxies(_space, 2);
-            int sum = 0;
-
-            for (int i = 0; i < galaxies.Count - 1; ++i)
-                for (int j = i + 1; j < galaxies.Count; ++j)
-                    sum += galaxies[i].Manhattan(galaxies[j]);
+            long sum = SumGalaxyDistances(galaxies);
 
             return sum.ToString();
         }
@@ -30,11 +26,7 @@ namespace AOC_23.Challenges
         public string Challenge2()
         {
             List<Vector2> galaxies = GetGalaxies(_space, 1_000_000);
-            long sum = 0;
-
-            for (int i = 0; i < galaxies.Count - 1; ++i)
-                for (int j = i + 1; j < galaxies.Count; ++j)
-                    sum += galaxies[i].Manhattan(galaxies[j]);
+            long sum = SumGalaxyDistances(galaxies);
 
             return sum.ToString();
         }
@@ -69,6 +61,17 @@ namespace AOC_23.Challenges
             }
 
             return galaxies;
+        }
+
+        private static long SumGalaxyDistances(List<Vector2> galaxies)
+        {
+            long sum = 0;
+
+            for (int i = 0; i < galaxies.Count - 1; ++i)
+                for (int j = i + 1; j < galaxies.Count; ++j)
+                    sum += galaxies[i].Manhattan(galaxies[j]);
+
+            return sum;
         }
     }
 }
