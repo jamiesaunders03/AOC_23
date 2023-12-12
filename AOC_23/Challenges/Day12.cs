@@ -32,9 +32,6 @@ namespace AOC_23.Challenges
                 Console.WriteLine(sum.ToString());
             }
 
-            AssertEq(GetPermutations("????#???????#?????", new[] { 1, 8, 1, 1, 1, }), 9);
-            AssertEq(GetPermutations("??#??#???#?????????", new[] { 10, 2, 1, 1, }), 9);
-
             return sum.ToString();  // 8210 too high
         }
 
@@ -46,7 +43,7 @@ namespace AOC_23.Challenges
         public static int GetPermutations(string s, int[] nums)
         {
             if (nums.Length == 0)
-                return 1;
+                return s.Any(c => c == '#') ? 0 : 1;
 
             int total = 0;
 
