@@ -9,6 +9,8 @@ namespace AOC_23.Challenges
         private readonly List<string> _lines = new();
         private readonly List<int[]> _gaps = new();
 
+        private static Dictionary<string, long> _cache = new();
+
         public Day12()
         {
             string[] input = new FetchData(Day).ReadInput().TrimEnd().Split('\n');
@@ -29,7 +31,6 @@ namespace AOC_23.Challenges
             for (int i = 0; i < _lines.Count; ++i)
             {
                 sum += GetPermutations(_lines[i], _gaps[i]);
-                Console.WriteLine(sum.ToString());
             }
 
             return sum.ToString();
@@ -40,19 +41,25 @@ namespace AOC_23.Challenges
             long sum = 0;
             for (int i = 0; i < _lines.Count; ++i)
             {
-                string line = string.Join(",", Enumerable.Repeat(_lines[i], 5));
+                string line = string.Join("?", Enumerable.Repeat(_lines[i], 5));
                 int[] nums = Enumerable.Repeat(_gaps[i], 5).SelectMany(arr => arr).ToArray();
 
                 sum += GetPermutations(line, nums);
+                _cache.Clear();
             }
 
-            return sum.ToString();
+            return sum.ToString();  // 37941262278587 too low
         }
 
         public static long GetPermutations(string s, int[] nums)
         {
             if (nums.Length == 0)
                 return s.Any(c => c == '#') ? 0 : 1;
+
+            if (_cache.TryGetValue(FormatKey(s, nums), out long hit))
+            {
+                return hit;
+            }
 
             long total = 0;
 
@@ -69,13 +76,19 @@ namespace AOC_23.Challenges
                     break;
             }
 
+            CacheAdd(s, nums, total);
             return total;
         }
 
-        public static void AssertEq(int a, int b)
+        private static void CacheAdd(string s, int[] nums, long value)
         {
-            if (a != b)
-                throw new Exception();
+            _cache[FormatKey(s, nums)] = value;
+        }
+
+        private static string FormatKey(string s, int[] nums)
+        {
+            string numString = string.Join(",", nums);
+            return s + numString;
         }
     }
 }
