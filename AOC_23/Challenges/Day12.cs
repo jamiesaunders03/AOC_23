@@ -32,20 +32,29 @@ namespace AOC_23.Challenges
                 Console.WriteLine(sum.ToString());
             }
 
-            return sum.ToString();  // 8210 too high
+            return sum.ToString();
         }
 
         public string Challenge2()
         {
-            throw new NotImplementedException();
+            long sum = 0;
+            for (int i = 0; i < _lines.Count; ++i)
+            {
+                string line = string.Join(",", Enumerable.Repeat(_lines[i], 5));
+                int[] nums = Enumerable.Repeat(_gaps[i], 5).SelectMany(arr => arr).ToArray();
+
+                sum += GetPermutations(line, nums);
+            }
+
+            return sum.ToString();
         }
 
-        public static int GetPermutations(string s, int[] nums)
+        public static long GetPermutations(string s, int[] nums)
         {
             if (nums.Length == 0)
                 return s.Any(c => c == '#') ? 0 : 1;
 
-            int total = 0;
+            long total = 0;
 
             int maxIterStop = s.Length - (nums.Sum() + nums.Length - 1);
             for (int i = 0; i <= maxIterStop; ++i)
