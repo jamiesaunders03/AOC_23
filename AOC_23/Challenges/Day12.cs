@@ -9,7 +9,8 @@ namespace AOC_23.Challenges
         private readonly List<string> _lines = new();
         private readonly List<int[]> _gaps = new();
 
-        private static Dictionary<string, long> _cache = new();
+        // Cache output for speed
+        private static readonly Dictionary<string, long> _cache = new();
 
         public Day12()
         {

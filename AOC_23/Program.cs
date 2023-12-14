@@ -10,4 +10,4 @@ log4net.Config.XmlConfigurator.Configure();
 ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 logger.Info("Starting challenge runner");
 
-ChallengeRunner.RunChallenge<Day12>();
+ChallengeRunner.RunChallenge<Day13>();

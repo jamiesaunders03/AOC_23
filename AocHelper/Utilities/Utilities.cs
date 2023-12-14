@@ -35,5 +35,17 @@ namespace AocHelper.Utilities
                 Console.WriteLine();
             }
         }
+
+        public static void PrintGrid<T>(IEnumerable<IEnumerable<T>> vals, Func<T, char> map)
+        {
+            foreach (IEnumerable<T> row in vals)
+            {
+                foreach (T val in row)
+                {
+                    Console.Write(map(val));
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }
