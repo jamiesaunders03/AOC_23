@@ -5,10 +5,10 @@ namespace AOC_23.Challenges
 {
     internal class Day14 : IAocChallenge
     {
-        internal struct Obstruction
+        internal class Obstruction
         {
             public char Type { get; }
-            public Vector2 Position { get; }
+            public Vector2 Position { get; set; }
 
             public Obstruction(char type, Vector2 position)
             {
@@ -42,14 +42,16 @@ namespace AOC_23.Challenges
 
         public string Challenge1()
         {
-            foreach (List<Obstruction> column in _columns)
+            // Copy references
+            List<Obstruction>[] columns = _columns.Select(lst => lst.ToList()).ToArray();
+            foreach (List<Obstruction> column in columns)
             {
                 if (column[0].Type == 'O')
-                    column[0].Position.Y = 0;
+                    column[0].Position = new Vector2(column[0].Position.X, 0);
                 for (int r = 1; r < column.Count; r++)
                 {
                     if (column[r].Type == 'O')
-                        column[r].Position.Y = column[r - 1].Position.Y + 1;
+                        column[r].Position = new Vector2(column[r].Position.X, column[r - 1].Position.Y + 1);
                 }
             }
 
