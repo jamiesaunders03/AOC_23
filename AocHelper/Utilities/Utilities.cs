@@ -35,5 +35,22 @@ namespace AocHelper.Utilities
                 Console.WriteLine();
             }
         }
+
+        /// <summary>
+        /// Prints a 2d array to the console
+        /// </summary>
+        /// <param name="vals">The array to print</param>
+        /// <param name="map">How each elem should be displayed</param>
+        public static void PrintGrid<T>(IEnumerable<IEnumerable<T>> vals, Func<T, char> map)
+        {
+            foreach (IEnumerable<T> row in vals)
+            {
+                foreach (T val in row)
+                {
+                    Console.Write(map(val));
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }
