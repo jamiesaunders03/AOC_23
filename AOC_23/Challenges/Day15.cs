@@ -77,22 +77,20 @@ namespace AOC_23.Challenges
         private static void UpdateLens(string s, ref List<Lens>[] lens)
         {
             Match m = _labelRe.Match(s);
+
             string name = m.Groups[1].Value;
-            int index = GetHashScore(name);
             string rest = m.Groups[2].Value;
 
+            int index = GetHashScore(name);
             List<Lens> box = lens[index];
-            if (rest == "-")
+            int boxIndex = box.FindIndex(l => l.Code == name);
+
+            if (rest == "-" && boxIndex != -1)
             {
-                int boxIndex = box.FindIndex(l => l.Code == name);
-                if (boxIndex != -1)
-                {
-                    box.RemoveAt(boxIndex);
-                }
+                box.RemoveAt(boxIndex);
             }
-            else
+            else if (rest != "-")
             {
-                int boxIndex = box.FindIndex(l => l.Code == name);
                 if (boxIndex == -1)
                 {
                     box.Add(new Lens(name, rest[^1] - '0'));
