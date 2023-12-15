@@ -84,28 +84,24 @@ namespace AOC_23.Challenges
             List<Lens> box = lens[index];
             if (rest == "-")
             {
-                for (int i = 0; i < box.Count; ++i)
+                int boxIndex = box.FindIndex(l => l.Code == name);
+                if (boxIndex != -1)
                 {
-                    if (box[i].Code == name)
-                    {
-                        box.RemoveAt(i);
-                        return;
-                    }
+                    box.RemoveAt(boxIndex);
                 }
             }
             else
             {
-                foreach (Lens l in box)
+                int boxIndex = box.FindIndex(l => l.Code == name);
+                if (boxIndex == -1)
                 {
-                    if (l.Code == name)
-                    {
-                        int lensStrength = rest[^1] - '0';
-                        box[box.IndexOf(l)] = new Lens(name, lensStrength);
-                        return;
-                    }
+                    box.Add(new Lens(name, rest[^1] - '0'));
                 }
-
-                box.Add(new Lens(name, rest[^1] - '0'));
+                else
+                {
+                    int lensStrength = rest[^1] - '0';
+                    box[boxIndex] = new Lens(name, lensStrength);
+                }
             }
         }
     }
