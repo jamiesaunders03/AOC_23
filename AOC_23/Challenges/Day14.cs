@@ -1,4 +1,5 @@
-﻿using AocHelper;
+﻿using System.Collections.Immutable;
+using AocHelper;
 using AocHelper.Utilities;
 
 namespace AOC_23.Challenges
@@ -18,6 +19,8 @@ namespace AOC_23.Challenges
         }
 
         public int Day => 14;
+
+        private const int TOTAL_ITERATIONS = 1_000_000_000;
 
         private readonly List<Obstruction>[] _columns;
         private readonly int _height;
@@ -55,25 +58,71 @@ namespace AOC_23.Challenges
                 }
             }
 
-            long sum = 0;
-            foreach (List<Obstruction> column in _columns)
-            {
-                sum += column
-                    .Where(obs => obs.Type == 'O')
-                    .Sum(itm => _height - itm.Position.Y);
-            }
+            long sum = CalculateLoad(columns);
             return sum.ToString();  // 88059 too low, 111092 too high
         }
 
         public string Challenge2()
         {
-            // move
-            // transpose
-            // store result
-            // if seen again, work out interval
-            // once found loop, determine final state
-            // calculate score
-            return "";
+            List<Obstruction>[] columns = _columns.Select(lst => lst.ToList()).ToArray();
+            Dictionary<HashContainer<int>, int> prevPositions = new();
+            int iteration = 0;
+
+            while (iteration < 1_000_000_000)
+            {
+                // Difference func for URDL, cycle
+                foreach (List<Obstruction> column in columns)
+                {
+                    if (column[0].Type == 'O')
+                        column[0].Position = new Vector2(column[0].Position.X, 0);
+                    for (int r = 1; r < column.Count; r++)
+                    {
+                        if (column[r].Type == 'O')
+                            column[r].Position = new Vector2(column[r].Position.X, column[r - 1].Position.Y + 1);
+                    }
+                }
+
+                var vals = columns
+                    .SelectMany(col => col
+                        .Where(obs => obs.Type == 'O')
+                        .Select(obs => obs.Position.X + obs.Position.Y * _height))
+                    .ToList();
+                vals.Sort();
+                var positions = new HashContainer<int>(vals);
+
+                if (prevPositions.TryGetValue(positions, out int prevIteration))
+                {
+                    if (iteration % 4 != prevIteration % 4)
+                    {
+
+                    }
+                    int toGo = TOTAL_ITERATIONS - iteration;
+                    int cycleLen = iteration - prevIteration;
+                    int fullCycles = toGo / cycleLen;
+                    iteration += fullCycles * cycleLen;
+                }
+                else
+                {
+                    prevPositions[positions] = iteration;
+                }
+                ++iteration;
+            }
+
+            long sum = CalculateLoad(columns);
+            return sum.ToString();
+        }
+
+        private long CalculateLoad(List<Obstruction>[] columns)
+        {
+            long sum = 0;
+            foreach (List<Obstruction> column in columns)
+            {
+                sum += column
+                    .Where(obs => obs.Type == 'O')
+                    .Sum(itm => _height - itm.Position.Y);
+            }
+
+            return sum;
         }
     }
 }

@@ -19,6 +19,17 @@ namespace AocHelper.Utilities
             return arr[vec.Y, vec.X];
         }
 
+        public static T[] Initialize<T>(Func<T> initializer, int size)
+        {
+            var arr = new T[size];
+            for (int i = 0; i < size; ++i)
+            {
+                arr[i] = initializer();
+            }
+
+            return arr;
+        }
+
         /// <summary>
         /// Prints a 2d array to the console
         /// </summary>
