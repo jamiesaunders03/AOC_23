@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace AocHelper.Utilities
 {
     public class Vector2
@@ -21,6 +19,17 @@ namespace AocHelper.Utilities
             Y = y;
         }
 
+        public Vector2() : this(0, 0) { }
+
+        #region Defaults
+
+        public static Vector2 Right => new (1, 0);
+        public static Vector2 Left => new (-1, 0);
+        public static Vector2 Up => new (0, 1);
+        public static Vector2 Down => new (0, -1);
+
+        #endregion
+
         #region Operations
 
         public static Vector2 operator +(Vector2 v1, Vector2 v2)
@@ -31,6 +40,21 @@ namespace AocHelper.Utilities
         public static Vector2 operator -(Vector2 v1, Vector2 v2)
         {
             return new Vector2(v1.X - v2.X, v1.Y - v2.Y);
+        }
+
+        public static Vector2 operator -(Vector2 v1)
+        {
+            return new Vector2(-v1.X, -v1.Y);
+        }
+
+        public static bool operator ==(Vector2 v1, Vector2 v2)
+        {
+            return v1.X == v2.X && v1.Y == v2.Y;
+        }
+
+        public static bool operator !=(Vector2 v1, Vector2 v2)
+        {
+            return !(v1 == v2);
         }
 
         #endregion
@@ -81,6 +105,17 @@ namespace AocHelper.Utilities
         public Vector2 Normal()
         {
             return new Vector2(-Y, X);
+        }
+
+        /// <summary>
+        /// Checks whether the current vector fits within a space of the given dimensions
+        /// </summary>
+        /// <param name="width">The width of the space</param>
+        /// <param name="height">The height of the space</param>
+        /// <returns></returns>
+        public bool InSpace(int width, int height)
+        {
+            return X >= 0 && X < width && Y >= 0 && Y < height;
         }
     }
 }
