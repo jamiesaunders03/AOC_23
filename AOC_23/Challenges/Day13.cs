@@ -21,7 +21,7 @@ namespace AOC_23.Challenges
 
         public string Challenge1()
         {
-            int sum = _grids.Sum(GetGridScore);
+            int sum = _grids.Sum(g => GetGridScore(g));
             return sum.ToString();
         }
 
@@ -34,13 +34,15 @@ namespace AOC_23.Challenges
                 sum += RunPermutations(gridParts);
             }
 
-            return sum.ToString();  // 36178 too low
+            return sum.ToString();
         }
 
-        private int GetGridScore(string[] grid)
+        private int GetGridScore(string[] grid, int invalidScore = -1)
         {
-            int score = GetScore(grid.Select(c => c.ToCharArray()).ToArray());
-            if (score != -1)
+            int invalidI = invalidScore >= HORIZONTAL_MULTIPLIER ? invalidScore / HORIZONTAL_MULTIPLIER : -1;
+
+            int score = GetScore(grid.Select(c => c.ToCharArray()).ToArray(), invalidI);
+            if (score != -1 && score * HORIZONTAL_MULTIPLIER != invalidScore)
                 return score * HORIZONTAL_MULTIPLIER;
 
             char[][] rotated = new char[grid[0].Length][];
@@ -49,11 +51,11 @@ namespace AOC_23.Challenges
                 rotated[i] = grid.Select(s => s[i]).ToArray();
             }
 
-            score = GetScore(rotated);
-            return score;
+            score = GetScore(rotated, invalidScore);
+            return score == invalidScore ? -1 : score;
         }
 
-        private int GetScore(char[][] grid)
+        private int GetScore(char[][] grid, int invalidI = -1)
         {
             for (int i = 1; i < grid.Length; i++)
             {
@@ -70,7 +72,7 @@ namespace AOC_23.Challenges
                         break;
                     }
                 }
-                if (equal)
+                if (equal && i != invalidI)
                     return i;
             }
 
@@ -79,6 +81,7 @@ namespace AOC_23.Challenges
 
         private int RunPermutations(char[][] grid)
         {
+            int original = GetGridScore(grid.Select(s => new string(s)).ToArray());
             for (int i = 0; i < grid.Length; ++i)
             {
                 for (int j = 0; j < grid[i].Length; ++j)
@@ -86,7 +89,7 @@ namespace AOC_23.Challenges
                     // Discount non-changed versions
                     char current = grid[i][j];
                     grid[i][j] = current == '#' ? '.' : '#';
-                    int score = GetGridScore(grid.Select(s => new string(s)).ToArray());
+                    int score = GetGridScore(grid.Select(s => new string(s)).ToArray(), invalidScore: original);
                     grid[i][j] = current;
 
                     if (score != -1)
