@@ -117,5 +117,20 @@ namespace AocHelper.Utilities
         {
             return X >= 0 && X < width && Y >= 0 && Y < height;
         }
+
+        /// <summary>
+        /// Returns all of the vectors that are directly adjacent to this one
+        /// </summary>
+        /// <returns></returns>
+        public Vector2[] Adjacent()
+        {
+            return new[]
+            {
+                this + Up,
+                this + Right,
+                this + Down,
+                this + Left,
+            };
+        }
     }
 }
