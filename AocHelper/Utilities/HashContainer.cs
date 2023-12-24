@@ -35,7 +35,7 @@ namespace AocHelper.Utilities
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            _hashCode ??= _values.GetHashCode();
+            _hashCode ??= GetArrayHash(_values);
             return (int)_hashCode;
         }
 
@@ -62,7 +62,7 @@ namespace AocHelper.Utilities
 
             if (other.Length != _values.Length)
                 return false;
-            if (other.GetHashCode() != GetHashCode())
+            if (GetArrayHash(other) != GetHashCode())
                 return false;
 
             return !_values.Where((t, i) => !t.Equals(other[i])).Any();
@@ -84,6 +84,18 @@ namespace AocHelper.Utilities
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        private int GetArrayHash(T[] values)
+        {
+            int hash = 17;
+            foreach (T value in values)
+            {
+                hash += value.GetHashCode();
+                hash *= 31;
+            }
+
+            return hash;
         }
     }
 }
