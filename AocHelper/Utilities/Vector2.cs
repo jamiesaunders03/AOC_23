@@ -42,6 +42,11 @@ namespace AocHelper.Utilities
             return new Vector2(v1.X - v2.X, v1.Y - v2.Y);
         }
 
+        public static Vector2 operator -(Vector2 v)
+        {
+            return new Vector2(-v.X, -v.Y);
+        }
+
         public static bool operator ==(Vector2 v1, Vector2 v2)
         {
             return v1.X == v2.X && v1.Y == v2.Y;
