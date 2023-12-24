@@ -83,6 +83,7 @@ resharper_csharp_wrap_lines = false
 resharper_indent_raw_literal_string = indent
 resharper_trailing_comma_in_multiline_lists = true
 resharper_xmldoc_indent_text = DoNotTouch
+resharper_xml_use_indent_from_vs = false
 
 # ReSharper inspection severities
 resharper_arrange_redundant_parentheses_highlighting = hint
@@ -96,3 +97,8 @@ resharper_redundant_base_qualifier_highlighting = warning
 resharper_suggest_var_or_type_built_in_types_highlighting = hint
 resharper_suggest_var_or_type_elsewhere_highlighting = hint
 resharper_suggest_var_or_type_simple_types_highlighting = hint
+
+[*.{appxmanifest,asax,ascx,aspx,axaml,axml,build,config,cs,csproj,dbml,discomap,dtd,jsproj,lsproj,master,njsproj,nuspec,paml,proj,props,resw,resx,skin,StyleCop,targets,tasks,vb,vbproj,xaml,xamlx,xml,xoml,xsd}]
+indent_style = space
+indent_size = 4
+tab_width = 4
