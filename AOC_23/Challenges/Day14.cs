@@ -27,7 +27,7 @@ namespace AOC_23.Challenges
 
         public Day14()
         {
-            string[] input = new FetchData(Day).ReadInput("Day14Part1.txt").TrimEnd().Split('\n');
+            string[] input = new FetchData(Day).ReadInput().TrimEnd().Split('\n');
             _height = input.Length;
             _columns = new List<Obstruction>[input[0].Length];
 
@@ -61,15 +61,18 @@ namespace AOC_23.Challenges
 
             while (iteration < 1_000_000_000)
             {
-                bool isVertical = iteration % 2 == 0;
-                bool invert = iteration % 4 is 1 or 2;
-                columns = GetGroups(columns, isVertical, invert);
+                for (int cycle = 0; cycle < 4; ++cycle)
+                {
+                    bool isVertical = cycle % 2 == 0;
+                    bool invert = cycle is 2 or 3;
+                    columns = GetGroups(columns, isVertical, invert);
 
-                if (isVertical)
-                    MoveVertical(ref columns, invert);
-                else
-                    MoveHorizontal(ref columns, invert);
-
+                    if (isVertical)
+                        MoveVertical(ref columns, invert);
+                    else
+                        MoveHorizontal(ref columns, invert);
+                }
+                
                 HashContainer<int> positions = GetPositionSet(columns);
                 if (prevPositions.TryGetValue(positions, out int prevIteration))
                 {
@@ -86,7 +89,7 @@ namespace AOC_23.Challenges
             }
 
             long sum = CalculateLoad(columns);
-            return sum.ToString();  // 84110 too low
+            return sum.ToString();
         }
 
         private long CalculateLoad(List<Obstruction>[] columns)
