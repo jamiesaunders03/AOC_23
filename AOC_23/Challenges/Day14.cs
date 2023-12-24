@@ -105,16 +105,16 @@ namespace AOC_23.Challenges
         private List<Obstruction>[] GetGroups(List<Obstruction>[] obstructions, bool isVertical, bool invert)
         {
             Func<Obstruction, int> selector;
-            Comparison<Obstruction> comparitor;
+            Comparison<Obstruction> comparator;
             if (isVertical)
             {
                 selector = obstruction => obstruction.Position.X;
-                comparitor = (obs1, obs2) => obs1.Position.Y.CompareTo(obs2.Position.Y);
+                comparator = (obs1, obs2) => obs1.Position.Y.CompareTo(obs2.Position.Y);
             }
             else
             {
                 selector = obstruction => obstruction.Position.Y;
-                comparitor = (obs1, obs2) => obs1.Position.X.CompareTo(obs2.Position.X);
+                comparator = (obs1, obs2) => obs1.Position.X.CompareTo(obs2.Position.X);
             }
 
             List<Obstruction>[] newObstructions = obstructions
@@ -125,7 +125,7 @@ namespace AOC_23.Challenges
 
             foreach (List<Obstruction> obs in newObstructions)
             {
-                obs.Sort(comparitor);
+                obs.Sort(comparator);
                 if (invert)
                     obs.Reverse();
             }
