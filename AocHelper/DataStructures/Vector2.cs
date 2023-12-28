@@ -1,5 +1,4 @@
-﻿
-namespace AocHelper.Utilities
+﻿namespace AocHelper.DataStructures
 {
     public class Vector2
     {
@@ -15,7 +14,7 @@ namespace AocHelper.Utilities
 
         public Vector2(int x, int y)
         {
-            X = x; 
+            X = x;
             Y = y;
         }
 
@@ -23,10 +22,10 @@ namespace AocHelper.Utilities
 
         #region Defaults
 
-        public static Vector2 Right => new (1, 0);
-        public static Vector2 Left => new (-1, 0);
-        public static Vector2 Up => new (0, 1);
-        public static Vector2 Down => new (0, -1);
+        public static Vector2 Right => new(1, 0);
+        public static Vector2 Left => new(-1, 0);
+        public static Vector2 Up => new(0, 1);
+        public static Vector2 Down => new(0, -1);
 
         #endregion
 
