@@ -11,14 +11,12 @@ namespace AOC_23.Challenges
             public Vector2 Position { get; }
             public Vector2 Direction { get; }
             public int Steps { get; }
-            public int CurrentHeat { get; }
 
-            public Movement(Vector2 position, Vector2 direction, int steps, int currentHeat)
+            public Movement(Vector2 position, Vector2 direction, int steps)
             {
                 Position = position;
                 Direction = direction;
                 Steps = steps;
-                CurrentHeat = currentHeat;
             }
         }
 
@@ -67,7 +65,7 @@ namespace AOC_23.Challenges
             int width = _heatMap[0].Length;
             int height = _heatMap.Length;
             
-            List<Movement> movements = new() { new Movement(pos, new Vector2(), 0, 0) };
+            List<Movement> movements = new() { new Movement(pos, new Vector2(), 0) };
 
             while (movements.Count > 0)
             {
@@ -77,7 +75,7 @@ namespace AOC_23.Challenges
                 Vector2[] adjacent = m.Position
                     .Adjacent()
                     .Where(v => v.InSpace(width, height))
-                    .Where(v => v != -m.Direction)
+                    .Where(v => v - m.Position != -m.Direction)
                     .ToArray();
 
                 foreach (Vector2 move in adjacent)
@@ -87,16 +85,16 @@ namespace AOC_23.Challenges
                     if (m.Steps == 2 && sameDirection)
                         continue;
 
-                    int dist = m.CurrentHeat + _heatMap[move.Y][move.X];
+                    int dist = input[m.Position.Y, m.Position.X, m.Steps] + _heatMap[move.Y][move.X];
                     if (sameDirection)
                     {
                         if (SetPosition(ref input, (move.X, move.Y), dist, m.Steps + 1))
-                            movements.Add(new Movement(move, move - m.Position, m.Steps + 1, input[move.Y, move.X, m.Steps + 1]));
+                            movements.Add(new Movement(move, move - m.Position, m.Steps + 1));
                     }
                     else
                     {
                         if (SetPosition(ref input, (move.X, move.Y), dist, 0))
-                            movements.Add(new Movement(move, move - m.Position, 0, input[move.Y, move.X, 0]));
+                            movements.Add(new Movement(move, move - m.Position, 0));
                     }
                 }
             }
