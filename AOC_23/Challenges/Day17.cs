@@ -26,33 +26,30 @@ namespace AOC_23.Challenges
 
         public Day17()
         {
-            string[] input = new FetchData(Day).ReadInput("Day17Part1a.txt").TrimEnd().Split('\n');
+            string[] input = new FetchData(Day).ReadInput("Day17Part1.txt").TrimEnd().Split('\n');
             _heatMap = input.Select(row => row.Select(num => num - '0').ToArray()).ToArray();
         }
 
         public string Challenge1()
         {
-            int[,,] input = new int[_heatMap.Length, _heatMap[0].Length, 3];
+            int[,,,] input = new int[_heatMap.Length, _heatMap[0].Length, 3, 4];
             input.Fill(int.MaxValue);
-            SetPosition(ref input, (0, 0), 0, 0);
+
+            for (int i = 0; i < 4; ++i)
+                SetPosition(ref input, (0, 0), 0, 0, i);
 
             Dijkstra(ref input, new Vector2());
 
-            for (int k = 0; k < 3; ++k)
+            for (int i = 0; i < _heatMap.Length; i++)
             {
-                for (int i = 0; i < _heatMap.Length; i++)
+                for (int j = 0; j < _heatMap[i].Length; j++)
                 {
-                    for (int j = 0; j < _heatMap[i].Length; j++)
-                    {
-                        Console.Write($"{input[i, j, k]:000} ");
-                    }
-                    Console.WriteLine();
+                    Console.Write($"{MinAtPos(input, j, i):000} ");
                 }
                 Console.WriteLine();
             }
             
-
-            return input[input.GetLength(0) - 1, input.GetLength(1) - 1, 2].ToString();  // 962 too low
+            return MinAtPos(input, input.GetLength(0) - 1, input.GetLength(1) - 1).ToString();  // 962 too low
         }
 
         public string Challenge2()
@@ -60,7 +57,7 @@ namespace AOC_23.Challenges
             throw new NotImplementedException();
         }
 
-        private void Dijkstra(ref int[,,] input, Vector2 pos)
+        private void Dijkstra(ref int[,,,] input, Vector2 pos)
         {
             int width = _heatMap[0].Length;
             int height = _heatMap.Length;
@@ -85,34 +82,60 @@ namespace AOC_23.Challenges
                     if (m.Steps == 2 && sameDirection)
                         continue;
 
-                    int dist = input[m.Position.Y, m.Position.X, m.Steps] + _heatMap[move.Y][move.X];
+                    int curDirIndex = GetIndexForDir(direction);
+                    int prevDirIndex = GetIndexForDir(m.Direction);
+                    int dist = input[m.Position.Y, m.Position.X, m.Steps, prevDirIndex] + _heatMap[move.Y][move.X];
                     if (sameDirection)
                     {
-                        if (SetPosition(ref input, (move.X, move.Y), dist, m.Steps + 1))
+                        if (SetPosition(ref input, (move.X, move.Y), dist, m.Steps + 1, curDirIndex))
                             movements.Add(new Movement(move, move - m.Position, m.Steps + 1));
                     }
                     else
                     {
-                        if (SetPosition(ref input, (move.X, move.Y), dist, 0))
+                        if (SetPosition(ref input, (move.X, move.Y), dist, 0, curDirIndex))
                             movements.Add(new Movement(move, move - m.Position, 0));
                     }
                 }
             }
         }
 
-        private bool SetPosition(ref int[,,] dists, (int x, int y) pos, int dist, int depth)
+        private bool SetPosition(ref int[,,,] dists, (int x, int y) pos, int dist, int depth, int dirIndex)
         {
             bool update = false;
             for (int i = depth; i <= 2; ++i)
             {
-                if (dist < dists[pos.y, pos.x, i])
+                if (dist < dists[pos.y, pos.x, i, dirIndex])
                 {
-                    dists[pos.y, pos.x, i] = dist;
+                    dists[pos.y, pos.x, i, dirIndex] = dist;
                     update = true;
                 }
             }
 
             return update;
+        }
+
+        private static int GetIndexForDir(Vector2 dir)
+        {
+            if (dir == Vector2.Up)
+                return 0;
+            else if (dir == Vector2.Right)
+                return 1;
+            else if (dir == Vector2.Down)
+                return 2;
+            else
+                return 3;
+        }
+
+        private static int MinAtPos(in int[,,,] space, int x, int y)
+        {
+            int min = int.MaxValue;
+            for (int dir = 0; dir < 4; ++dir)
+            {
+                if (space[y, x, 2, dir] < min)
+                    min = space[y, x, 2, dir];
+            }
+
+            return min;
         }
     }
 }
