@@ -45,6 +45,35 @@ namespace AocHelper.Utilities
             
         }
 
+        /// <summary>
+        /// Populates an array with a value
+        /// Note that for reference types this will mean the same reference is used for every element
+        /// </summary>
+        /// <param name="value">The value to fill the array with</param>
+        public static void Fill<T>(this T[,,] arr, T value)
+        {
+            for (int i = 0; i < arr.GetLength(0); i++)
+                for (int j = 0; j < arr.GetLength(1); j++)
+                    for (int k = 0; k < arr.GetLength(2); k++)
+                        arr[i, j, k] = value;
+
+        }
+
+        /// <summary>
+        /// Populates an array with a value
+        /// Note that for reference types this will mean the same reference is used for every element
+        /// </summary>
+        /// <param name="value">The value to fill the array with</param>
+        public static void Fill<T>(this T[,,,] arr, T value)
+        {
+            for (int i = 0; i < arr.GetLength(0); i++)
+            for (int j = 0; j < arr.GetLength(1); j++)
+            for (int k = 0; k < arr.GetLength(2); k++)
+            for (int l = 0; l < arr.GetLength(3); l++)
+                arr[i, j, k, l] = value;
+
+        }
+
         #endregion
 
         #region Char

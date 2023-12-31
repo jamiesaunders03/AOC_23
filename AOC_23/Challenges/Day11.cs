@@ -1,4 +1,5 @@
 ﻿using AocHelper;
+using AocHelper.DataStructures;
 using AocHelper.Utilities;
 
 namespace AOC_23.Challenges
