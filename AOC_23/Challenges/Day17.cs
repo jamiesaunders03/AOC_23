@@ -26,7 +26,7 @@ namespace AOC_23.Challenges
 
         public Day17()
         {
-            string[] input = new FetchData(Day).ReadInput("Day17Part1.txt").TrimEnd().Split('\n');
+            string[] input = new FetchData(Day).ReadInput().TrimEnd().Split('\n');
             _heatMap = input.Select(row => row.Select(num => num - '0').ToArray()).ToArray();
         }
 
@@ -39,17 +39,7 @@ namespace AOC_23.Challenges
                 SetPosition(ref input, (0, 0), 0, 0, i);
 
             Dijkstra(ref input, new Vector2());
-
-            for (int i = 0; i < _heatMap.Length; i++)
-            {
-                for (int j = 0; j < _heatMap[i].Length; j++)
-                {
-                    Console.Write($"{MinAtPos(input, j, i):000} ");
-                }
-                Console.WriteLine();
-            }
-            
-            return MinAtPos(input, input.GetLength(0) - 1, input.GetLength(1) - 1).ToString();  // 962 too low
+            return MinAtPos(input, input.GetLength(0) - 1, input.GetLength(1) - 1).ToString();
         }
 
         public string Challenge2()
