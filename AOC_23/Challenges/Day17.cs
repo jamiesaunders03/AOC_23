@@ -22,6 +22,7 @@ namespace AOC_23.Challenges
 
         public int Day => 17;
 
+        private const int DIRECTIONS = 4;
         private readonly int[][] _heatMap;
 
         public Day17()
@@ -32,14 +33,8 @@ namespace AOC_23.Challenges
 
         public string Challenge1()
         {
-            int[,,,] input = new int[_heatMap.Length, _heatMap[0].Length, 3, 4];
-            input.Fill(int.MaxValue);
-
-            for (int i = 0; i < 4; ++i)
-                SetPosition(ref input, (0, 0), 0, 0, i);
-
-            Dijkstra(ref input, new Vector2());
-            return MinAtPos(input, input.GetLength(0) - 1, input.GetLength(1) - 1).ToString();
+            Dictionary<int, int[,]> dists = Dijkstra(new Vector2(), 3);
+            return MinAtPos(dists, _heatMap.Length - 1, _heatMap[0].Length - 1).ToString();
         }
 
         public string Challenge2()
@@ -47,11 +42,14 @@ namespace AOC_23.Challenges
             throw new NotImplementedException();
         }
 
-        private void Dijkstra(ref int[,,,] input, Vector2 pos)
+        private Dictionary<int, int[,]> Dijkstra(Vector2 pos, int maxDist)
         {
             int width = _heatMap[0].Length;
             int height = _heatMap.Length;
-            
+
+            Dictionary<int, int[,]> space = new();
+            InitialiseSection(ref space, 0, maxDist, 0);
+
             List<Movement> movements = new() { new Movement(pos, new Vector2(), 0) };
 
             while (movements.Count > 0)
@@ -69,34 +67,43 @@ namespace AOC_23.Challenges
                 {
                     Vector2 direction = move - m.Position;
                     bool sameDirection = direction == m.Direction;
-                    if (m.Steps == 2 && sameDirection)
+                    if (m.Steps == maxDist - 1 && sameDirection)
                         continue;
 
                     int curDirIndex = GetIndexForDir(direction);
                     int prevDirIndex = GetIndexForDir(m.Direction);
-                    int dist = input[m.Position.Y, m.Position.X, m.Steps, prevDirIndex] + _heatMap[move.Y][move.X];
+                    int dist = GetDist(space, m.Position, m.Steps, prevDirIndex) + _heatMap[move.Y][move.X];
                     if (sameDirection)
                     {
-                        if (SetPosition(ref input, (move.X, move.Y), dist, m.Steps + 1, curDirIndex))
+                        if (SetPosition(ref space, (move.X, move.Y), dist, m.Steps + 1, curDirIndex, maxDist))
                             movements.Add(new Movement(move, move - m.Position, m.Steps + 1));
                     }
                     else
                     {
-                        if (SetPosition(ref input, (move.X, move.Y), dist, 0, curDirIndex))
+                        if (SetPosition(ref space, (move.X, move.Y), dist, 0, curDirIndex, maxDist))
                             movements.Add(new Movement(move, move - m.Position, 0));
                     }
                 }
             }
+
+            return space;
         }
 
-        private bool SetPosition(ref int[,,,] dists, (int x, int y) pos, int dist, int depth, int dirIndex)
+        private bool SetPosition(ref Dictionary<int, int[,]> space, (int x, int y) pos, int dist, int depth, int dirIndex, int maxDist)
         {
             bool update = false;
-            for (int i = depth; i <= 2; ++i)
+            int key = pos.y * _heatMap[0].Length + pos.x;
+
+            if (!space.TryGetValue(key, out int[,] dists))
             {
-                if (dist < dists[pos.y, pos.x, i, dirIndex])
+                dists = InitialiseSection(ref space, key, maxDist, int.MaxValue);
+            }
+
+            for (int i = depth; i < dists.GetLength(0); ++i)
+            {
+                if (dist < dists[i, dirIndex])
                 {
-                    dists[pos.y, pos.x, i, dirIndex] = dist;
+                    dists[i, dirIndex] = dist;
                     update = true;
                 }
             }
@@ -116,16 +123,35 @@ namespace AOC_23.Challenges
                 return 3;
         }
 
-        private static int MinAtPos(in int[,,,] space, int x, int y)
+        private int MinAtPos(in Dictionary<int, int[,]> space, int x, int y)
         {
             int min = int.MaxValue;
+            int[,] area = space[y * _heatMap[0].Length + x];
+
             for (int dir = 0; dir < 4; ++dir)
+                if (area[area.GetLength(0) - 1, dir] < min)
+                    min = area[area.GetLength(0) - 1, dir];
+            
+            return min;
+        }
+
+        private int GetDist(in Dictionary<int, int[,]> space, Vector2 pos, int depth, int dir)
+        {
+            if (space.TryGetValue(pos.Y * _heatMap[0].Length + pos.X, out int[,] moves))
             {
-                if (space[y, x, 2, dir] < min)
-                    min = space[y, x, 2, dir];
+                return moves[depth, dir];
             }
 
-            return min;
+            return int.MaxValue;
+        }
+
+        private static int[,] InitialiseSection(ref Dictionary<int, int[,]> map, int index, int length, int value)
+        {
+            int[,] shape = new int[length, DIRECTIONS];
+            shape.Fill(value);
+
+            map[index] = shape;
+            return shape;
         }
     }
 }
