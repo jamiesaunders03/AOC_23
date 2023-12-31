@@ -100,15 +100,12 @@ namespace AOC_23.Challenges
                 dists = InitialiseSection(ref space, key, maxDist, int.MaxValue);
             }
 
-            if (depth < minDist)
+            if (depth < minDist && dist < dists[depth, dirIndex])
             {
-                if (dist < dists[depth, dirIndex])
-                {
-                    dists[depth, dirIndex] = dist;
-                    update = true;
-                }
+                dists[depth, dirIndex] = dist;
+                update = true;
             }
-            else
+            else if (depth >= minDist)
             {
                 for (int i = depth; i < dists.GetLength(0); ++i)
                 {
