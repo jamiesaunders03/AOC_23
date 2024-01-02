@@ -74,13 +74,7 @@ namespace AOC_23.Challenges
             }
             ++i;
 
-            List<Metal> metals = new();
-            while (i < input.Length)
-            {
-                metals.Add(ParseMetal(input[i]));
-                ++i;
-            }
-
+            var metals = input.Skip(i).Select(ParseMetal).ToList();
             _metals = metals.ToArray();
         }
 
