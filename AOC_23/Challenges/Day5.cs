@@ -2,6 +2,8 @@
 
 using AocHelper;
 
+using Range = AocHelper.DataStructures.Range;
+
 namespace AOC_23.Challenges
 {
     internal class Day5 : IAocChallenge
@@ -31,18 +33,6 @@ namespace AOC_23.Challenges
                 SourceType = sourceType;
                 DestinationType = destinationType;
                 Transformations = transformations;
-            }
-        }
-
-        internal readonly struct Range
-        {
-            public long Start { get; }
-            public long Length { get; }
-
-            public Range(long start, long length)
-            {
-                Start = start;
-                Length = length;
             }
         }
 
@@ -82,7 +72,7 @@ namespace AOC_23.Challenges
         {
             var seeds = new List<Range>();
             for (int i = 0; i < _seeds.Count; i += 2)
-                seeds.Add(new Range(_seeds[i], _seeds[i + 1]));
+                seeds.Add(new (_seeds[i], _seeds[i + 1]));
 
             foreach (Mapping map in _mappings)
             {

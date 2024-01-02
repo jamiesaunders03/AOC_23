@@ -103,6 +103,11 @@ namespace AOC_23.Challenges
 
         public string Challenge2()
         {
+            // Create full range
+            // Each rule, create new range group
+            // If R, drop group, if A, add range to list
+            // Return count of A
+
             throw new NotImplementedException();
         }
 
