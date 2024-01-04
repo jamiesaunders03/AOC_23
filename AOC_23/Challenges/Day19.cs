@@ -2,6 +2,8 @@
 
 using AocHelper;
 
+using Range = AocHelper.DataStructures.Range;
+
 namespace AOC_23.Challenges
 {
     internal class Day19 : IAocChallenge
@@ -45,6 +47,24 @@ namespace AOC_23.Challenges
             }
         }
 
+        private readonly struct MetalRange
+        {
+            public Range X { get; }
+            public Range M { get; }
+            public Range A { get; }
+            public Range S { get; }
+
+            public MetalRange(Range x, Range m, Range a, Range s)
+            {
+                X = x;
+                M = m;
+                A = a;
+                S = s;
+            }
+
+            public long Elements() => X.Length * M.Length * A.Length * S.Length;
+        }
+
         public int Day => 19;
 
         private const string START_WORKFLOW = "in";
@@ -74,7 +94,7 @@ namespace AOC_23.Challenges
             }
             ++i;
 
-            var metals = input.Skip(i).Select(ParseMetal).ToList();
+            List<Metal> metals = input.Skip(i).Select(ParseMetal).ToList();
             _metals = metals.ToArray();
         }
 
@@ -103,12 +123,33 @@ namespace AOC_23.Challenges
 
         public string Challenge2()
         {
-            // Create full range
-            // Each rule, create new range group
-            // If R, drop group, if A, add range to list
-            // Return count of A
+            List<(string, MetalRange)> ranges = new()
+            {
+                (START_WORKFLOW, new MetalRange(
+                    new Range(1, 4000), 
+                    new Range(1, 4000), 
+                    new Range(1, 4000), 
+                    new Range(1, 4000))),
+            };
+            List<MetalRange> accepted = new();
 
-            throw new NotImplementedException();
+            while (ranges.Count != 0)
+            {
+                (string wf, MetalRange rng) = ranges[0];
+                ranges.RemoveAt(0);
+                List<(string, MetalRange)> computedRanges = GetGroupRanges(rng, _workflows[wf]);
+
+                foreach ((string wf, MetalRange rng) computedRange in computedRanges)
+                {
+                    if (computedRange.wf == "A")
+                        accepted.Add(computedRange.rng);
+                    else if (computedRange.wf != "R")
+                        ranges.Add(computedRange);
+                }
+            }
+
+            long total = accepted.Sum(r => r.Elements());
+            return total.ToString();
         }
 
         private static string GetGroup(Metal m, WorkflowOption[] workflow)
@@ -139,6 +180,11 @@ namespace AOC_23.Challenges
                 'x' => m.X,
                 _ => throw new Exception(),
             };
+        }
+
+        private static List<(string, MetalRange)> GetGroupRanges(MetalRange range, WorkflowOption[] workflow)
+        {
+            return null;
         }
 
         private static WorkflowOption ParseWorkflowOption(string section)
