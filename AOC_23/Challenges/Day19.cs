@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 using AocHelper;
 
@@ -31,38 +32,20 @@ namespace AOC_23.Challenges
             public string State { get; }
         }
 
-        private readonly struct Metal
+        private readonly struct Metal<T>
         {
-            public int X { get; }
-            public int M { get; }
-            public int A { get; }
-            public int S { get; }
+            public T X { get; }
+            public T M { get; }
+            public T A { get; }
+            public T S { get; }
 
-            public Metal(int x, int m, int a, int s)
+            public Metal(T x, T m, T a, T s)
             {
                 X = x;
                 M = m;
                 A = a;
                 S = s;
             }
-        }
-
-        private readonly struct MetalRange
-        {
-            public Range X { get; }
-            public Range M { get; }
-            public Range A { get; }
-            public Range S { get; }
-
-            public MetalRange(Range x, Range m, Range a, Range s)
-            {
-                X = x;
-                M = m;
-                A = a;
-                S = s;
-            }
-
-            public long Elements() => X.Length * M.Length * A.Length * S.Length;
         }
 
         public int Day => 19;
@@ -74,7 +57,7 @@ namespace AOC_23.Challenges
         private static readonly Regex _metalRe = new(@"{x=(\d+),m=(\d+),a=(\d+),s=(\d+)}");
 
         private readonly Dictionary<string, WorkflowOption[]> _workflows;
-        private readonly Metal[] _metals;
+        private readonly Metal<int>[] _metals;
 
         public Day19()
         {
@@ -94,18 +77,18 @@ namespace AOC_23.Challenges
             }
             ++i;
 
-            List<Metal> metals = input.Skip(i).Select(ParseMetal).ToList();
+            List<Metal<int>> metals = input.Skip(i).Select(ParseMetal).ToList();
             _metals = metals.ToArray();
         }
 
         public string Challenge1()
         {
-            List<Metal> accepted = new();
-            List<(string, Metal)> toProcess = _metals.Select(metal => new ValueTuple<string, Metal>(START_WORKFLOW, metal)).ToList();
+            List<Metal<int>> accepted = new();
+            List<(string, Metal<int>)> toProcess = _metals.Select(metal => new ValueTuple<string, Metal<int>>(START_WORKFLOW, metal)).ToList();
 
             while (toProcess.Count > 0)
             {
-                (string workflowName, Metal metal) next = toProcess[0];
+                (string workflowName, Metal<int> metal) next = toProcess[0];
                 toProcess.RemoveAt(0);
 
                 WorkflowOption[] workflow = _workflows[next.workflowName];
@@ -114,7 +97,7 @@ namespace AOC_23.Challenges
                 if (newWorkflow == "A")
                     accepted.Add(next.metal);
                 else if (newWorkflow != "R")
-                    toProcess.Add(new ValueTuple<string, Metal>(newWorkflow, next.metal));
+                    toProcess.Add(new ValueTuple<string, Metal<int>>(newWorkflow, next.metal));
             }
 
             long total = accepted.Sum(m => m.A + m.M + m.S + m.X);
@@ -123,23 +106,23 @@ namespace AOC_23.Challenges
 
         public string Challenge2()
         {
-            List<(string, MetalRange)> ranges = new()
+            List<(string, Metal<Range>)> ranges = new()
             {
-                (START_WORKFLOW, new MetalRange(
+                (START_WORKFLOW, new Metal<Range>(
                     new Range(1, 4000), 
                     new Range(1, 4000), 
                     new Range(1, 4000), 
                     new Range(1, 4000))),
             };
-            List<MetalRange> accepted = new();
+            List<Metal<Range>> accepted = new();
 
             while (ranges.Count != 0)
             {
-                (string wf, MetalRange rng) = ranges[0];
+                (string wf, Metal<Range> rng) = ranges[0];
                 ranges.RemoveAt(0);
-                List<(string, MetalRange)> computedRanges = GetGroupRanges(rng, _workflows[wf]);
+                List<(string, Metal<Range>)> computedRanges = GetGroupRanges(rng, _workflows[wf]);
 
-                foreach ((string wf, MetalRange rng) computedRange in computedRanges)
+                foreach ((string wf, Metal<Range> rng) computedRange in computedRanges)
                 {
                     if (computedRange.wf == "A")
                         accepted.Add(computedRange.rng);
@@ -148,11 +131,11 @@ namespace AOC_23.Challenges
                 }
             }
 
-            long total = accepted.Sum(r => r.Elements());
+            long total = accepted.Sum(GetElements);
             return total.ToString();
         }
 
-        private static string GetGroup(Metal m, WorkflowOption[] workflow)
+        private static string GetGroup(Metal<int> m, WorkflowOption[] workflow)
         {
             foreach (WorkflowOption wo in workflow)
             {
@@ -170,7 +153,7 @@ namespace AOC_23.Challenges
             throw new Exception();
         }
 
-        private static int GetMetalProp(Metal m, char prop)
+        private static T GetMetalProp<T>(Metal<T> m, char prop)
         {
             return prop switch
             {
@@ -182,9 +165,32 @@ namespace AOC_23.Challenges
             };
         }
 
-        private static List<(string, MetalRange)> GetGroupRanges(MetalRange range, WorkflowOption[] workflow)
+        private static List<(string, Metal<Range>)> GetGroupRanges(Metal<Range> range, WorkflowOption[] workflow)
         {
-            return null;
+            List<(string, Metal<Range>)> ranges = new();
+            foreach (WorkflowOption opt in workflow)
+            {
+                if (opt.Comparison == ComparisonEnum.NONE)
+                {
+                    ranges.Add((opt.State, range));
+                    break;
+                }
+                else if (opt.Comparison == ComparisonEnum.LT)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+
+            return ranges;
+        }
+
+        private static long GetElements(Metal<Range> range)
+        {
+            return range.X.Length * range.M.Length * range.A.Length * range.S.Length;
         }
 
         private static WorkflowOption ParseWorkflowOption(string section)
@@ -208,11 +214,11 @@ namespace AOC_23.Challenges
             return option;
         }
 
-        private static Metal ParseMetal(string line)
+        private static Metal<int> ParseMetal(string line)
         {
             Match m = _metalRe.Match(line);
 
-            return new Metal(
+            return new Metal<int>(
                 int.Parse(m.Groups[1].Value),
                 int.Parse(m.Groups[2].Value),
                 int.Parse(m.Groups[3].Value),
