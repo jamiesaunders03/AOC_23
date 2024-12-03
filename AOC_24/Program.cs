@@ -12,3 +12,4 @@ logger.Info("Starting challenge runner");
 
 ChallengeRunner.RunChallenge<Day01>();
 ChallengeRunner.RunChallenge<Day02>();
+ChallengeRunner.RunChallenge<Day03>();
