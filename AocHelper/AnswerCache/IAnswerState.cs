@@ -28,6 +28,6 @@ namespace AocHelper.AnswerCache
         /// <param name="newValue">The new value to consider</param>
         /// <param name="existingValues">The existing value(s)</param>
         /// <returns></returns>
-        public bool ShouldAddValue(string newValue, string[] existingValues);
+        public bool ShouldAddValue(string newValue, ICollection<string> existingValues);
     }
 }

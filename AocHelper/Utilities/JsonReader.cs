@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using System.Text.Json;
 
 namespace AocHelper.Utilities
 {
     internal class JsonReader
     {
-        public static dynamic ReadFile(string path)
+        public static Dictionary<string, List<string>> ReadFile(string path)
         {
             using StreamReader file = File.OpenText(path);
-            var json = JObject.Parse(file.ReadToEnd());
+            string content = file.ReadToEnd();
+
+            if (content == "")
+                return new Dictionary<string, List<string>>();
+            
+            var json = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(content);
+            if (json is null)
+                throw new InvalidDataException("Data in wrong format to de-serialize");
+            
             return json;
         }
     }

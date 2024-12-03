@@ -25,9 +25,9 @@ namespace AocHelper.AnswerCache
         /// <param name="newValue">The new value to consider</param>
         /// <param name="existingValues">The existing highest value deemed too small or Array.Empty if no such values registered</param>
         /// <returns></returns>
-        public bool ShouldAddValue(string newValue, string[] existingValues)
+        public bool ShouldAddValue(string newValue, ICollection<string> existingValues)
         {
-            return existingValues.Length != 0 && int.Parse(newValue) > int.Parse(existingValues[0]);
+            return existingValues.Count != 0 && int.Parse(newValue) > int.Parse(existingValues.ElementAt(0));
         }
     }
 }

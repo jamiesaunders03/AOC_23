@@ -1,7 +1,4 @@
 ﻿
-using System.Runtime.CompilerServices;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using JsonReader = AocHelper.Utilities.JsonReader;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -22,8 +19,9 @@ namespace AocHelper.AnswerCache
             string path = GetFilePath(year, day);
             CreateDir(path);
 
-            dynamic json = JsonReader.ReadFile(path);
-            string[] current = json[state.Description];
+
+            Dictionary<string, List<string>> json = JsonReader.ReadFile(path);
+            ICollection<string>? current = json.GetValueOrDefault(state.Description);
             if (current != null && !state.ShouldAddValue(answer, current))
                 return false;
 
@@ -46,7 +44,7 @@ namespace AocHelper.AnswerCache
             return true;
         }
 
-        private static string GetFilePath(int year, int day)
+        internal static string GetFilePath(int year, int day)
         {
             string path = Path.Combine(Constants.StartupPath, Constants.ANSWERS_CACHE_PATH);
             return string.Format(path, year, day);

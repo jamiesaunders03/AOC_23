@@ -22,9 +22,9 @@ namespace AocHelper.AnswerCache
         /// <param name="newValue">The new value to consider</param>
         /// <param name="existingValues">The correct value if stored, else Array.Empty</param>
         /// <returns></returns>
-        public bool ShouldAddValue(string newValue, string[] existingValues)
+        public bool ShouldAddValue(string newValue, ICollection<string> existingValues)
         {
-            return existingValues.Length == 0;
+            return existingValues.Count == 0;
         }
     }
 }
