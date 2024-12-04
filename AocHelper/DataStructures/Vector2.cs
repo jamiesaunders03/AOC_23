@@ -90,7 +90,7 @@
         /// <returns></returns>
         public double Abs()
         {
-            return System.Math.Sqrt(System.Math.Pow(X, 2) + System.Math.Pow(Y, 2));
+            return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@
         /// <returns></returns>
         public double Euclidean(Vector2 v)
         {
-            return System.Math.Sqrt(System.Math.Pow(X - v.X, 2) + System.Math.Pow(Y - v.Y, 2));
+            return Math.Sqrt(Math.Pow(X - v.X, 2) + Math.Pow(Y - v.Y, 2));
         }
 
         /// <summary>
@@ -110,7 +110,7 @@
         /// <returns></returns>
         public int Manhattan(Vector2 v)
         {
-            return System.Math.Abs(X - v.X) + System.Math.Abs(Y - v.Y);
+            return Math.Abs(X - v.X) + Math.Abs(Y - v.Y);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@
         /// <returns></returns>
         public int MaxDimDistance(Vector2 v)
         {
-            return System.Math.Max(System.Math.Abs(X - v.X), System.Math.Abs(Y - v.Y));
+            return Math.Max(Math.Abs(X - v.X), Math.Abs(Y - v.Y));
         }
 
         /// <summary>
@@ -144,7 +144,7 @@
         }
 
         /// <summary>
-        /// Returns all of the vectors that are directly adjacent to this one
+        /// Returns all the vectors that are directly adjacent to this one, excluding ones diagonally adjacent
         /// </summary>
         /// <returns></returns>
         public Vector2[] Adjacent()
@@ -155,6 +155,25 @@
                 this + Right,
                 this + Down,
                 this + Left,
+            };
+        }
+        
+        /// <summary>
+        /// Returns all the vectors that are directly adjacent to this one, including ones diagonally adjacent
+        /// </summary>
+        /// <returns></returns>
+        public Vector2[] Surrounding()
+        {
+            return new[]
+            {
+                this + Up,
+                this + Up + Right,
+                this + Right,
+                this + Down + Right,
+                this + Down,
+                this + Down + Left,
+                this + Left,
+                this + Up + Left,
             };
         }
     }
