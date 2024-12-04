@@ -12,12 +12,28 @@
         /// </summary>
         public int Y { get; }
 
+        /// <summary>
+        /// Create a new vector at the given (x, y) co-ordinates
+        /// </summary>
         public Vector2(int x, int y)
         {
             X = x;
             Y = y;
         }
+        
+        /// <summary>
+        /// Copy constructor, constructs a vector at the same point as the original
+        /// </summary>
+        /// <param name="v">The vector to base this vectors position off</param>
+        public Vector2(Vector2 v)
+        {
+            X = v.X;
+            Y = v.Y;
+        }
 
+        /// <summary>
+        /// Constructs a Vector2 t the point (0, 0)
+        /// </summary>
         public Vector2() : this(0, 0) { }
 
         #region Defaults
