@@ -2,8 +2,14 @@
 
 namespace AocHelper.Utilities
 {
-    internal class JsonReader
+    internal static class JsonReader
     {
+        /// <summary>
+        /// Reads the file at the given location as a structure representing past attempts
+        /// </summary>
+        /// <param name="path">The file path</param>
+        /// <returns>Representation of previous attempts</returns>
+        /// <exception cref="InvalidDataException">If the data in the file does not correctly deserialize</exception>
         public static Dictionary<string, List<string>> ReadFile(string path)
         {
             using StreamReader file = File.OpenText(path);

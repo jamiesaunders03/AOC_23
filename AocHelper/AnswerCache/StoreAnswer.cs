@@ -19,7 +19,6 @@ namespace AocHelper.AnswerCache
             string path = GetFilePath(year, day);
             CreateDir(path);
 
-
             Dictionary<string, List<string>> json = JsonReader.ReadFile(path);
             ICollection<string>? current = json.GetValueOrDefault(state.Description);
             if (current != null && !state.ShouldAddValue(answer, current))
@@ -44,6 +43,10 @@ namespace AocHelper.AnswerCache
             return true;
         }
 
+        /// <summary>
+        /// Returns the filepath to the answers cache for the given day/years input
+        /// </summary>
+        /// <returns>The file path as a string to where the cache file should be, if created</returns>
         internal static string GetFilePath(int year, int day)
         {
             string path = Path.Combine(Constants.StartupPath, Constants.ANSWERS_CACHE_PATH);
@@ -60,7 +63,8 @@ namespace AocHelper.AnswerCache
                 Directory.CreateDirectory(dir);
                 if (!File.Exists(path))
                 {
-                    File.Create(path);
+                    FileStream f = File.Create(path);
+                    f.Dispose();
                 }
             }
             catch (IOException) { }
