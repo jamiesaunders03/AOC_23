@@ -43,6 +43,21 @@
         public static Vector2 Up => new(0, 1);
         public static Vector2 Down => new(0, -1);
 
+        /// <summary>
+        /// All directions from the origin with maximum magnitude 1 in each axis
+        /// </summary>
+        public static Vector2[] Directions => new[]
+        {
+            Up,
+            Up + Right,
+            Right,
+            Down + Right,
+            Down,
+            Down + Left,
+            Left,
+            Up + Left,
+        };
+
         #endregion
 
         #region Operations
