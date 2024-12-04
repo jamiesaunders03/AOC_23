@@ -14,6 +14,26 @@ namespace AocHelper.Utilities
         {
             return arr[vec.Y, vec.X];
         }
+        
+        /// <summary>
+        /// Indexes a 2d array using a vector
+        /// </summary>
+        /// <param name="arr">The array to index</param>
+        /// <param name="vec">The vector to act as a index</param>
+        /// <param name="val">The return value, or `default` if out of bounds</param>
+        /// <returns></returns>
+        public static bool TryVectorIndex<T>(T[,] arr, Vector2 vec, out T? val)
+        {
+            val = default;
+            try
+            {
+                val = VectorIndex(arr, vec);
+                return true;
+            }
+            catch (IndexOutOfRangeException) { }
+            
+            return false;
+        }
 
         public static T[] Initialize<T>(Func<T> initializer, int size)
         {
