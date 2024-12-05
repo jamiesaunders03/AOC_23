@@ -10,6 +10,7 @@ internal class Day04 : IAocChallenge
     public int Day => 4;
 
     private const string TARGET_STRING = "XMAS";
+    private const string X_MAS_LOOP_COMBINATIONS = "MSSMMSS";
     private static readonly Vector2[] _corners = [
         new Vector2(1, 1), 
         new Vector2(-1, 1), 
@@ -49,21 +50,11 @@ internal class Day04 : IAocChallenge
             var pos = new Vector2(i, j);
             if (Utilities.VectorIndex(_searchGrid, pos) != 'A')
                 continue;
-            
-            // Check diagonal corners
-            var corners = new List<char>();
-            foreach (Vector2 diff in _corners)
-            {
-                Utilities.TryVectorIndex(_searchGrid, pos + diff, out char corner);
-                corners.Add(corner);
-            }
 
-            if (corners.Count(c => c == 'M') == 2 
-                && corners.Count(c => c == 'S') == 2
-                && corners[0] != corners[2])
-            {
+            List<char> corners = GetCornerChars(pos);
+            if (X_MAS_LOOP_COMBINATIONS.Contains(string.Join("", corners)))
                 ++matches;
-            }
+            
         }
 
         return matches.ToString();  // 2004 too low
@@ -82,5 +73,18 @@ internal class Day04 : IAocChallenge
         }
 
         return true;
+    }
+    
+    private List<char> GetCornerChars(Vector2 pos)
+    {
+        // Check diagonal corners
+        var corners = new List<char>();
+        foreach (Vector2 diff in _corners)
+        {
+            Utilities.TryVectorIndex(_searchGrid, pos + diff, out char corner);
+            corners.Add(corner);
+        }
+
+        return corners;
     }
 }
