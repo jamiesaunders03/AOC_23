@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using JsonReader = AocHelper.Utilities.JsonReader;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AocHelper.AnswerCache
 {
@@ -16,14 +14,60 @@ namespace AocHelper.AnswerCache
         /// <param name="day">The day of challenge</param>
         /// <param name="year">The year of challenge</param>
         /// <returns>Whether a change was made to the file</returns>
-        public static bool SaveAnswer(string answer, AnswerState state, int day, int year)
+        public static bool SaveAnswer(string answer, IAnswerState state, int day, int year)
         {
-            return false;
+            string path = GetFilePath(year, day);
+            CreateDir(path);
+
+            Dictionary<string, List<string>> json = JsonReader.ReadFile(path);
+            ICollection<string>? current = json.GetValueOrDefault(state.Description);
+            if (current != null && !state.ShouldAddValue(answer, current))
+                return false;
+
+            current ??= Array.Empty<string>();
+            switch (state.AnswerType)
+            {
+                case AnswerStateType.ADDITIVE:
+                    json[state.Description] = new List<string>(current) { answer };
+                    break;
+                case AnswerStateType.SINGLE:
+                    json[state.Description] = new List<string> { answer };
+                    break;
+                default:
+                    throw new NotImplementedException("Unknown Answer State");
+            }
+
+            string jsonString = JsonSerializer.Serialize(json);
+            File.WriteAllText(path, jsonString);
+
+            return true;
         }
 
-        private static string GetFilePath(int year, int day)
+        /// <summary>
+        /// Returns the filepath to the answers cache for the given day/years input
+        /// </summary>
+        /// <returns>The file path as a string to where the cache file should be, if created</returns>
+        internal static string GetFilePath(int year, int day)
         {
-            return "";
+            string path = Path.Combine(Constants.StartupPath, Constants.ANSWERS_CACHE_PATH);
+            return string.Format(path, year, day);
+        }
+
+        private static void CreateDir(string path)
+        {
+            string[] parts = path.Split('/');
+            string dir = string.Join("\\", parts.SkipLast(1));
+
+            try
+            {
+                Directory.CreateDirectory(dir);
+                if (!File.Exists(path))
+                {
+                    FileStream f = File.Create(path);
+                    f.Dispose();
+                }
+            }
+            catch (IOException) { }
         }
     }
 }

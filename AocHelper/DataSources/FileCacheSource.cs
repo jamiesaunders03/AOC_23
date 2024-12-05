@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
+
 using log4net;
 
 namespace AocHelper.DataSources
 {
     internal class FileCacheSource : IInputDataFetcher
     {
-        private const string CACHE_PATH = ".cache/Input/{0}/day{1}.txt";
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
@@ -60,7 +55,7 @@ namespace AocHelper.DataSources
 
         private string GetFilePath()
         {
-            string fileRoute = Path.Join(Constants.StartupPath, CACHE_PATH);
+            string fileRoute = Path.Join(Constants.StartupPath, Constants.INPUT_CACHE_PATH);
             fileRoute = string.Format(fileRoute, Year, Day);
 
             return fileRoute;
