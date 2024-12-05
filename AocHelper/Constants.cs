@@ -1,7 +1,7 @@
 ﻿
 namespace AocHelper
 {
-    internal class Constants
+    internal static class Constants
     {
         /// <summary>
         /// Input cache format path
