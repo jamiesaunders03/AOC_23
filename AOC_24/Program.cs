@@ -10,7 +10,11 @@ log4net.Config.XmlConfigurator.Configure();
 ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 logger.Info("Starting challenge runner");
 
-ChallengeRunner.RunChallenge<Day01>();
-ChallengeRunner.RunChallenge<Day02>();
-ChallengeRunner.RunChallenge<Day03>();
-ChallengeRunner.RunChallenge<Day04>();
+const bool VERBOSE = false;
+Action<string> timeReporter = VERBOSE ? Console.WriteLine : _ => { };
+
+ChallengeRunner.RunChallenge<Day01>(timeReporter);
+ChallengeRunner.RunChallenge<Day02>(timeReporter);
+ChallengeRunner.RunChallenge<Day03>(timeReporter);
+ChallengeRunner.RunChallenge<Day04>(timeReporter);
+ChallengeRunner.RunChallenge<Day05>(timeReporter);

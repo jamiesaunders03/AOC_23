@@ -49,6 +49,8 @@ namespace AocHelper
             {
                 _logger.Info("No challenge 2 implemented for this day, skipping");
             }
+            
+            Console.WriteLine();
         }
 
         private static TimeSpan RunAction(Func<object> a, out object o)
