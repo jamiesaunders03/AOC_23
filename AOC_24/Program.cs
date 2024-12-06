@@ -18,3 +18,4 @@ ChallengeRunner.RunChallenge<Day02>(timeReporter);
 ChallengeRunner.RunChallenge<Day03>(timeReporter);
 ChallengeRunner.RunChallenge<Day04>(timeReporter);
 ChallengeRunner.RunChallenge<Day05>(timeReporter);
+ChallengeRunner.RunChallenge<Day06>(timeReporter);

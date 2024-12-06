@@ -10,6 +10,7 @@ namespace AocHelper.Utilities
     {
         /// <summary>
         /// Enumerates over each element of a 2d array, yielding the indices and value of each pos
+        /// The location tuple returns elements as a (y, x) tuple
         /// </summary>
         /// <param name="array">The array to enumerate</param>
         /// <returns></returns>
@@ -30,6 +31,7 @@ namespace AocHelper.Utilities
         /// <summary>
         /// Enumerates over each element of a 2d array, yielding the indices and value of each pos
         /// Special case for string array
+        /// The location tuple returns elements as a (y, x) tuple
         /// </summary>
         /// <param name="array">The array to enumerate</param>
         /// <returns></returns>
