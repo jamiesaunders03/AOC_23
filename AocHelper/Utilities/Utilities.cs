@@ -16,6 +16,17 @@ namespace AocHelper.Utilities
         }
         
         /// <summary>
+        /// Indexes an array of strings
+        /// </summary>
+        /// <param name="strs">The string array to index</param>
+        /// <param name="vec">The vector to act as a index</param>
+        /// <returns></returns>
+        public static char VectorIndex(string[] strs, Vector2 vec)
+        {
+            return strs[vec.Y][vec.X];
+        }
+        
+        /// <summary>
         /// Indexes a 2d array using a vector
         /// </summary>
         /// <param name="arr">The array to index</param>
@@ -28,6 +39,26 @@ namespace AocHelper.Utilities
             try
             {
                 val = VectorIndex(arr, vec);
+                return true;
+            }
+            catch (IndexOutOfRangeException) { }
+            
+            return false;
+        }
+        
+        /// <summary>
+        /// Indexes an array of strings using a vector
+        /// </summary>
+        /// <param name="strs">The string array to index</param>
+        /// <param name="vec">The vector to act as a index</param>
+        /// <param name="val">The return value, or `default` if out of bounds</param>
+        /// <returns></returns>
+        public static bool TryVectorIndex(string[] strs, Vector2 vec, out char val)
+        {
+            val = default;
+            try
+            {
+                val = VectorIndex(strs, vec);
                 return true;
             }
             catch (IndexOutOfRangeException) { }
