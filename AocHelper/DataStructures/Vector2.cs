@@ -114,6 +114,8 @@
         }
 
         #endregion
+        
+        #region Distance Based
 
         /// <summary>
         /// Gets the magnitude of this vector
@@ -153,6 +155,26 @@
         {
             return Math.Max(Math.Abs(X - v.X), Math.Abs(Y - v.Y));
         }
+        
+        #endregion Distance Based
+
+        #region Rotational
+
+        /// <summary>
+        /// Returns the current Vector rotated left 90 degrees
+        /// </summary>
+        public Vector2 RotateLeft()
+        {
+            return new Vector2(-Y, X);
+        }
+        
+        /// <summary>
+        /// Returns the current Vector rotated right 90 degrees
+        /// </summary>
+        public Vector2 RotateRight()
+        {
+            return new Vector2(Y, -X);
+        }
 
         /// <summary>
         /// Returns the vector normal to this one with the same magnitude
@@ -162,6 +184,8 @@
         {
             return new Vector2(-Y, X);
         }
+
+        #endregion Rotational
 
         /// <summary>
         /// Checks whether the current vector fits within a space of the given dimensions
@@ -173,6 +197,8 @@
         {
             return X >= 0 && X < width && Y >= 0 && Y < height;
         }
+
+        #region Adjacency
 
         /// <summary>
         /// Returns all the vectors that are directly adjacent to this one, excluding ones diagonally adjacent
@@ -207,5 +233,7 @@
                 this + Up + Left,
             };
         }
+
+        #endregion
     }
 }
