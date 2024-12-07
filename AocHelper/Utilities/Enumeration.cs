@@ -50,16 +50,18 @@ namespace AocHelper.Utilities
         /// <param name="opts">The options to generate the permutations from</param>
         /// <param name="len">The length of the permutation to generate</param>
         /// <returns></returns>
-        public static IEnumerable<IList<T>> PermutationsFrom<T>(ICollection<T> opts, int len)
+        public static IEnumerable<List<T>> PermutationsFrom<T>(ICollection<T> opts, int len)
         {
-            int iterations = (int)System.Math.Pow(opts.Count, len);
+            int opsLen = opts.Count;
+            int iterations = (int)System.Math.Pow(opsLen, len);
 
             for (int i = 0; i < iterations; ++i)
             {
                 var perm = new List<T>();
                 for (int op = 0; op < len; ++op)
                 {
-                    perm.Add(opts.ElementAt((i / (int)System.Math.Pow(len, op)) % opts.Count));   
+                    int index = (i / (int)System.Math.Pow(opsLen, op)) % opsLen;
+                    perm.Add(opts.ElementAt(index));   
                 }
 
                 yield return perm;
