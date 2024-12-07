@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using AocHelper.Utilities;
+﻿using AocHelper.Utilities;
 
 namespace AocHelper.Tests;
 

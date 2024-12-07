@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using AocHelper;
+﻿using AocHelper;
 using AocHelper.Utilities;
 
 namespace AOC_24.Challenges;
@@ -30,28 +29,39 @@ internal class Day07 : IAocChallenge
             (first, second) => first * second,
         };
 
-        return _equations.Count(e => CanProcess(e, funcs)).ToString();
+        return _equations
+            .Where(e => CanProcess(e, funcs))
+            .Sum(e => e.Total)
+            .ToString();
     }
 
     public string Challenge2()
     {
-        throw new NotImplementedException();
+        var funcs = new List<Func<long, long, long>>
+        {
+            (first, second) => first + second,
+            (first, second) => first * second,
+            (first, second) => long.Parse(first.ToString() + second.ToString()),
+        };
+
+        return _equations
+            .Where(e => CanProcess(e, funcs))
+            .Sum(e => e.Total)
+            .ToString();
     }
 
     private bool CanProcess(Equation e, ICollection<Func<long, long, long>> ops)
     {
-        foreach (IList<Func<long, long, long>> opList in Enumeration.PermutationsFrom(ops, e.Nums.Length - 1))
+        foreach (List<Func<long, long, long>> opList in Enumeration.PermutationsFrom(ops, e.Nums.Length - 1))
         {
             long cur = e.Nums[0];
-
-            try
+            unchecked
             {
-                foreach ((long First, Func<long, long, long> Second) iterOp in e.Nums.Skip(1).Zip(opList))
-                {
-                    cur = iterOp.Second.Invoke(cur, iterOp.First);
-                } 
+                cur = e.Nums
+                    .Skip(1)
+                    .Zip(opList)
+                    .Aggregate(cur, (current, iterOp) => iterOp.Second.Invoke(current, iterOp.First));
             }
-            catch (TargetInvocationException ex) when (ex.InnerException is OverflowException) { }
 
             if (cur == e.Total)
                 return true;
