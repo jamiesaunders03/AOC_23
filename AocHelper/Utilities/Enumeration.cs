@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace AocHelper.Utilities
 {
     public static class Enumeration
@@ -46,6 +41,28 @@ namespace AocHelper.Utilities
                 {
                     yield return ((i, j), array[i][j]);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="opts">The options to generate the permutations from</param>
+        /// <param name="len">The length of the permutation to generate</param>
+        /// <returns></returns>
+        public static IEnumerable<IList<T>> PermutationsFrom<T>(ICollection<T> opts, int len)
+        {
+            int iterations = (int)System.Math.Pow(opts.Count, len);
+
+            for (int i = 0; i < iterations; ++i)
+            {
+                var perm = new List<T>();
+                for (int op = 0; op < len; ++op)
+                {
+                    perm.Add(opts.ElementAt((i / (int)System.Math.Pow(len, op)) % opts.Count));   
+                }
+
+                yield return perm;
             }
         }
     }
