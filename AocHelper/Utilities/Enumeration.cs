@@ -45,7 +45,8 @@ namespace AocHelper.Utilities
         }
 
         /// <summary>
-        /// 
+        /// Gets the full set of permutations generated from the given collection, each of the given length.
+        /// The length of the enumerable is `opts.Count ^ len`
         /// </summary>
         /// <param name="opts">The options to generate the permutations from</param>
         /// <param name="len">The length of the permutation to generate</param>
@@ -61,10 +62,46 @@ namespace AocHelper.Utilities
                 for (int op = 0; op < len; ++op)
                 {
                     int index = (i / (int)System.Math.Pow(opsLen, op)) % opsLen;
-                    perm.Add(opts.ElementAt(index));   
+                    perm.Add(opts.ElementAt(index));
                 }
 
                 yield return perm;
+            }
+        }
+
+        /// <summary>
+        /// Generates the combinations between each element in the given collection
+        /// Each combination returned is unique with regard to the referenced elements.
+        /// </summary>
+        /// <param name="opts">The options to generate the permutations from</param>
+        /// <param name="len">The length of the permutation to generate</param>
+        /// <returns></returns>
+        public static IEnumerable<List<T>> Combinations<T>(List<T> opts, int len)
+        {
+            if (len < 1 || len > opts.Count)
+                throw new ArgumentException("Cannot generate combinations of length < 1", nameof(len));
+
+            return CalcCombinations(opts, len);
+        }
+
+        private static IEnumerable<List<T>> CalcCombinations<T>(List<T> opts, int len)
+        {
+            // Base condition
+            if (len == 1)
+            {
+                foreach (T item in opts)
+                    yield return [ item ];
+                
+                yield break;
+            }
+
+            for (int i = 0; i <= opts.Count - len; ++i)
+            {
+                IEnumerable<List<T>> combs = CalcCombinations(opts.Skip(i + 1).ToList(), len - 1);
+                foreach (List<T> subComb in combs)
+                {
+                    yield return [ opts.ElementAt(i), ..subComb ];
+                }
             }
         }
     }
