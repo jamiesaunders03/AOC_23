@@ -81,15 +81,23 @@ internal class Day08 : IAocChallenge
         foreach (List<Vector2> pair in Enumeration.Combinations(satellites, 2))
         {
             Vector2 delta = pair[1] - pair[0];
-
-            // extend
-            points.Add(pair[0] - delta);
-            points.Add(pair[1] + delta);
+            
+            points.Add(pair[0]);
+            
+            Vector2 point = new Vector2(pair[0]) + delta;
+            while (point is { X: >= 0, Y: >= 0 } && point.X < _width && point.Y < _height)
+            {
+                points.Add(point);
+                point += delta;
+            }
+            
+            point = new Vector2(pair[0]) - delta;
+            while (point is { X: >= 0, Y: >= 0 } && point.X < _width && point.Y < _height)
+            {
+                points.Add(point);
+                point -= delta;
+            }
         }
-
-        points = points
-            .Where(p => p is { X: >= 0, Y: >= 0 } && p.X < _width && p.Y < _height)
-            .ToHashSet();
         
         return points;
     }
