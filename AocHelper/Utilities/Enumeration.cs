@@ -13,7 +13,7 @@ namespace AocHelper.Utilities
     {
         /// <summary>
         /// Enumerates over each element of a 2d array, yielding the indices and value of each pos
-        /// The location tuple returns elements as a (y, x) tuple
+        /// The location tuple returns elements as a (y, x) position
         /// </summary>
         /// <param name="array">The array to enumerate</param>
         /// <returns></returns>
@@ -22,14 +22,14 @@ namespace AocHelper.Utilities
             int h = array.GetLength(0);
             int w = array.GetLength(1);
 
-            for (int i = 0; i < h; i++)
+            for (int y = 0; y < h; y++)
             {
-                for (int j = 0; j < w; j++)
+                for (int x = 0; x < w; x++)
                 {
                     yield return new GridPointer<T>
                     {
-                        Pos = new Vector2(i, j), 
-                        Value = array[i, j]
+                        Pos = new Vector2(y, x), 
+                        Value = array[y, x],
                     };
                 }
             }
