@@ -50,14 +50,14 @@ namespace AOC_23.Challenges
                     emptyCols.Add(j);
             }
 
-            foreach (((int i, int j), char c) in Enumeration.EnumerateArray(space))
+            foreach (GridPointer<char> pointer in Enumeration.EnumerateArray(space))
             {
-                if (c == GALAXY)
+                if (pointer.Value == GALAXY)
                 {
-                    int iOffset = emptyRows.Count(v => i >= v) * (sep - 1);
-                    int jOffset = emptyCols.Count(v => j >= v) * (sep - 1);
+                    int iOffset = emptyRows.Count(v => pointer.Pos.X >= v) * (sep - 1);
+                    int jOffset = emptyCols.Count(v => pointer.Pos.Y >= v) * (sep - 1);
 
-                    galaxies.Add(new Vector2(j + jOffset, i + iOffset));
+                    galaxies.Add(new Vector2(pointer.Pos.Y + jOffset, pointer.Pos.X + iOffset));
                 }
             }
 

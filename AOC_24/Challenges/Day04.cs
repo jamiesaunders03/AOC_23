@@ -29,14 +29,12 @@ internal class Day04 : IAocChallenge
 
     public string Challenge1()
     {
-        int matches = 0;
         Vector2[] dirs = Vector2.Directions;
-        
-        foreach (((int i, int j), _) in Enumeration.EnumerateArray(_searchGrid))
-        {
-            var v = new Vector2(i, j);
-            matches += dirs.Count(dir => IsXMas(v, dir));
-        }
+
+        int matches = Enumeration
+            .EnumerateArray(_searchGrid)
+            .Select(pointer => dirs.Count(dir => IsXMas(pointer.Pos, dir)))
+            .Sum();
 
         return matches.ToString();
     }
@@ -45,9 +43,9 @@ internal class Day04 : IAocChallenge
     {
         int matches = 0;
         
-        foreach (((int i, int j), _) in Enumeration.EnumerateArray(_searchGrid))
+        foreach (GridPointer<char> pointer in Enumeration.EnumerateArray(_searchGrid))
         {
-            var pos = new Vector2(i, j);
+            Vector2 pos = pointer.Pos;
             if (Utilities.VectorIndex(_searchGrid, pos) != 'A')
                 continue;
 
@@ -57,7 +55,7 @@ internal class Day04 : IAocChallenge
             
         }
 
-        return matches.ToString();  // 2004 too low
+        return matches.ToString();
     }
 
     private bool IsXMas(Vector2 v, Vector2 dir)

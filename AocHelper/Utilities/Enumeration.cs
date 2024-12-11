@@ -1,6 +1,14 @@
 ﻿
+using AocHelper.DataStructures;
+
 namespace AocHelper.Utilities
 {
+    public struct GridPointer<T>
+    {
+        public Vector2 Pos { get; init; }
+        public T Value { get; init; }
+    }
+    
     public static class Enumeration
     {
         /// <summary>
@@ -9,7 +17,7 @@ namespace AocHelper.Utilities
         /// </summary>
         /// <param name="array">The array to enumerate</param>
         /// <returns></returns>
-        public static IEnumerable<((int, int), T)> EnumerateArray<T>(T[,] array)
+        public static IEnumerable<GridPointer<T>> EnumerateArray<T>(T[,] array)
         {
             int h = array.GetLength(0);
             int w = array.GetLength(1);
@@ -18,7 +26,11 @@ namespace AocHelper.Utilities
             {
                 for (int j = 0; j < w; j++)
                 {
-                    yield return ((i, j), array[i, j]);
+                    yield return new GridPointer<T>
+                    {
+                        Pos = new Vector2(i, j), 
+                        Value = array[i, j]
+                    };
                 }
             }
         }
@@ -30,7 +42,7 @@ namespace AocHelper.Utilities
         /// </summary>
         /// <param name="array">The array to enumerate</param>
         /// <returns></returns>
-        public static IEnumerable<((int, int), char)> EnumerateArray(string[] array)
+        public static IEnumerable<GridPointer<char>> EnumerateArray(string[] array)
         {
             int h = array.Length;
             int w = array[0].Length;
@@ -39,7 +51,11 @@ namespace AocHelper.Utilities
             {
                 for (int j = 0; j < w; j++)
                 {
-                    yield return ((i, j), array[i][j]);
+                    yield return new GridPointer<char>
+                    {
+                        Pos = new Vector2(i, j), 
+                        Value = array[i][j],
+                    };
                 }
             }
         }

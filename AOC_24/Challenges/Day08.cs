@@ -20,10 +20,10 @@ internal class Day08 : IAocChallenge
         _height = input.Length;
         _width = input[0].Length;
 
-        foreach (((int x, int y), char c) in Enumeration.EnumerateArray(input))
+        foreach (GridPointer<char> pointer in Enumeration.EnumerateArray(input))
         {
-            if (c != '.')
-                _antennae[c].Add(new Vector2(x, y));
+            if (pointer.Value != '.')
+                _antennae[pointer.Value].Add(pointer.Pos);
         }
     }
 

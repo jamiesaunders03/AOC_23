@@ -87,9 +87,9 @@ internal class Day06 : IAocChallenge
 
     private Vector2 GetStartLocation()
     {
-        foreach (((int x, int y), char c) in Enumeration.EnumerateArray(_map))
-            if (c == START)
-                return new Vector2(y, x);
+        foreach (GridPointer<char> pointer in Enumeration.EnumerateArray(_map))
+            if (pointer.Value == START)
+                return pointer.Pos;
         
 
         throw new Exception("Could not find start location");

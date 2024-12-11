@@ -37,10 +37,11 @@ namespace AOC_23.Challenges
                 _columns[i] = new List<Obstruction>();
             }
 
-            foreach (((int i, int j), char c) in Enumeration.EnumerateArray(input)) 
+            foreach (GridPointer<char> pointer in Enumeration.EnumerateArray(input)) 
             {
-                if (c != '.')
-                    _columns[j].Add(new Obstruction(c, new Vector2(j, i)));
+                if (pointer.Value != '.')
+                    _columns[pointer.Pos.Y].Add(
+                        new Obstruction(pointer.Value, new Vector2(pointer.Pos.Y, pointer.Pos.X)));
             }
         }
 
