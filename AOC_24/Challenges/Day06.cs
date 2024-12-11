@@ -89,7 +89,7 @@ internal class Day06 : IAocChallenge
     {
         foreach (GridPointer<char> pointer in Enumeration.EnumerateArray(_map))
             if (pointer.Value == START)
-                return pointer.Pos;
+                return new Vector2(pointer.Pos.Y, pointer.Pos.X);
         
 
         throw new Exception("Could not find start location");
