@@ -12,6 +12,7 @@ internal class Day06 : IAocChallenge
     public int Day => 6;
 
     private readonly char[,] _map;
+    private Vector2? _startPositon = null;
 
     public Day06()
     {
@@ -61,7 +62,7 @@ internal class Day06 : IAocChallenge
         
         Vector2 current = GetStartLocation();
         Vector2 direction = Vector2.Down;
-        HashSet<Pair<Vector2, Vector2>> visitedWithDir = [];
+        HashSet<int> visitedWithDir = [];
 
         while (Utilities.TryVectorIndex(_map, current + direction, out char c) && !causesLoop)
         {
@@ -74,7 +75,7 @@ internal class Day06 : IAocChallenge
                 current += direction;
             }
 
-            var visitDir = new Pair<Vector2, Vector2>(current, direction);
+            int visitDir = GetPosDirScore(current, direction);
             if (!visitedWithDir.Add(visitDir))
             {
                 causesLoop = true;
@@ -85,12 +86,29 @@ internal class Day06 : IAocChallenge
         return causesLoop;
     }
 
+    private static int GetPosDirScore(Vector2 pos, Vector2 dir)
+    {
+        int score = pos.X + 1_000 * pos.Y;
+        score += 1_000_000 * dir.X + 2_000_000 * dir.Y;
+
+        return score;
+    }
+
     private Vector2 GetStartLocation()
     {
+        if (_startPositon is not null)
+        {
+            return _startPositon;
+        }
+
         foreach (GridPointer<char> pointer in Enumeration.EnumerateArray(_map))
+        {
             if (pointer.Value == START)
-                return new Vector2(pointer.Pos.Y, pointer.Pos.X);
-        
+            {
+                _startPositon = new Vector2(pointer.Pos.Y, pointer.Pos.X);
+                return _startPositon;
+            }
+        }
 
         throw new Exception("Could not find start location");
     }
