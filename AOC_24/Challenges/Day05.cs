@@ -40,9 +40,11 @@ internal class Day05 : IAocChallenge
     public string Challenge2()
     {
         List<int[]> rejected = _pages.Where(page => !AcceptPages(page)).ToList();
-        rejected = rejected.Select(SortPages).ToList();
         
-        int total = rejected.Sum(MiddlePageValue);
+        int total = rejected
+            .Select(SortPages)
+            .Sum(MiddlePageValue);
+        
         return total.ToString();
     }
 
@@ -50,9 +52,9 @@ internal class Day05 : IAocChallenge
     {
         for (int i = 0; i < page.Length; ++i)
         {
-            if (page.Skip(i + 1)
-                .Any(num => _rules
-                    .Contains(new Pair<int, int>(num, page[i]))))
+            if (page
+                .Skip(i + 1)
+                .Any(num => _rules.Contains(new Pair<int, int>(num, page[i]))))
             {
                 return false;
             }
@@ -61,7 +63,12 @@ internal class Day05 : IAocChallenge
         return true;
     }
     
-    private static int[] SortPages(int[] page)
+    /// <summary>
+    /// Create a new array of the pages, sorted by the rules in the puzzle.
+    /// </summary>
+    /// <param name="page">The page to sort</param>
+    /// <returns></returns>
+    private int[] SortPages(int[] page)
     {
         List<int> pages = page.ToList();
         int len = pages.Count;
@@ -69,11 +76,25 @@ internal class Day05 : IAocChallenge
         int i = 0;
         while (i < len)
         {
-            // look for non-conformance
-            // if found, move second value before current
-            // set i to value before current
+            bool changes = false;
+            int current = pages[i];
+            
+            // Check all numbers ahead of current, and move before if they violate a rule,
+            // maintaining order of moved pages
+            for (int j = i + 1; j < len; ++j)
+            {
+                int target = pages[j];
+                if (_rules.Contains(new Pair<int, int>(target, current)))
+                {
+                    // Move j to before current
+                    pages.RemoveAt(j);
+                    pages.Insert(i, target);
+                    changes = true;
+                }
+            }
 
-            ++i;
+            if (!changes)
+                ++i;
         }
 
         return pages.ToArray();
