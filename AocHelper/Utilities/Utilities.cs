@@ -16,6 +16,17 @@ namespace AocHelper.Utilities
         }
         
         /// <summary>
+        /// Sets a value at an index of a 2d array using a vector
+        /// </summary>
+        /// <param name="arr">The array to index</param>
+        /// <param name="vec">The vector to act as a index</param>
+        /// <param name="value">The value to assign to that position</param>
+        public static void SetVectorIndex<T>(T[,] arr, Vector2 vec, T value)
+        {
+            arr[vec.Y, vec.X] = value;
+        }
+        
+        /// <summary>
         /// Indexes an array of strings
         /// </summary>
         /// <param name="strs">The string array to index</param>
