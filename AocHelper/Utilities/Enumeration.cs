@@ -12,6 +12,21 @@ namespace AocHelper.Utilities
     public static class Enumeration
     {
         /// <summary>
+        /// Enumerates over each element of a 1d collection, yielding the indices and value of each pos
+        /// </summary>
+        /// <param name="collection">The collection to enumerate</param>
+        /// <returns></returns>
+        public static IEnumerable<Tuple<int, T>> EnumerateArray<T>(ICollection<T> collection)
+        {
+            int length = collection.Count;
+
+            for (int i = 0; i < length; i++)
+            {
+                yield return new Tuple<int, T>(i, collection.ElementAt(i));
+            }
+        }
+        
+        /// <summary>
         /// Enumerates over each element of a 2d array, yielding the indices and value of each pos
         /// The location tuple returns elements as a (y, x) position
         /// </summary>
