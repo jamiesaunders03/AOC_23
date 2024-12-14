@@ -42,7 +42,6 @@ internal class Day12 : IAocChallenge
     public Day12()
     {
         string[] input = new FetchData(Day, 2024).ReadInput().TrimEnd().Split('\n');
-        // string[] input = File.ReadAllLines("../../../TestCases/day12.txt");
         _regions = GetAllRegions(input.ToGrid());
     }
 
@@ -63,7 +62,7 @@ internal class Day12 : IAocChallenge
         return _regions
             .Select(r => r.Area * GetNumberOfSides(r))
             .Sum()
-            .ToString();  // 906486 too high
+            .ToString();
     }
 
     /// <summary>
@@ -153,23 +152,27 @@ internal class Day12 : IAocChallenge
         };
     }
     
+    /// <summary>
+    /// Gets the total number of sides that make up a region
+    /// </summary>
+    /// <param name="r">The region to get the sides of</param>
     private static int GetNumberOfSides(Region r)
     {
-        int sides = 0;
-
-        foreach ((int i, ICollection<Vector2> side) in Enumeration.EnumerateArray(r.Edges))
-        {
-            sides += GetSides(side, i);
-        }
-        
-        return sides;
+        return r.Edges.Select(GetSides).Sum();
     }
     
+    /// <summary>
+    /// Gets the sides from 1 direction of a region
+    /// </summary>
+    /// <param name="edgesOnSide">The points that make up the edges from the given angle</param>
+    /// <param name="dir">The direction that has been approached from (even = top/bottom, odd = left/right)</param>
     private static int GetSides(ICollection<Vector2> edgesOnSide, int dir)
     {
         int sides = 0;
+        
         Func<Vector2, int> groupSelector = GetSelector(dir);
         Func<Vector2, int> compSelector = GetSelector(dir + 1);
+        
         foreach (IGrouping<int, Vector2> levels in edgesOnSide.GroupBy(groupSelector))
         {
             ++sides;
@@ -177,7 +180,7 @@ internal class Day12 : IAocChallenge
             sidesOnRow.Sort((v1, v2) => compSelector(v1).CompareTo(compSelector(v2)));
             for (int i = 1; i < levels.Count(); ++i)
             {
-                if (Math.Abs(compSelector(sidesOnRow[i]) - compSelector(sidesOnRow[i - 1]) - 1) > 1e-5)
+                if (Math.Abs(compSelector(sidesOnRow[i]) - compSelector(sidesOnRow[i - 1])) != 1)
                 {
                     ++sides;
                 }
