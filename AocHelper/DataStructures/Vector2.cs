@@ -1,4 +1,6 @@
-﻿namespace AocHelper.DataStructures
+﻿using System.Text.RegularExpressions;
+
+namespace AocHelper.DataStructures
 {
     public class Vector2
     {
@@ -36,6 +38,20 @@
         /// </summary>
         public Vector2() : this(0, 0) { }
 
+        /// <summary>
+        /// Factory method to create a new instance of a vector 2 object from a regex match.
+        /// This method assumes that the matches groups 1 & 2 represent the x & y positions of
+        /// the vector as parseable ints
+        /// </summary>
+        /// <param name="m">The match object to parse</param>
+        public static Vector2 FromMatch(Match m)
+        {
+            int first = int.Parse(m.Groups[1].Value);
+            int second = int.Parse(m.Groups[2].Value);
+
+            return new Vector2(first, second);
+        }
+
         #region Defaults
 
         public static Vector2 Right => new(1, 0);
@@ -70,6 +86,11 @@
         public static Vector2 operator -(Vector2 v1, Vector2 v2)
         {
             return new Vector2(v1.X - v2.X, v1.Y - v2.Y);
+        }
+        
+        public static Vector2 operator *(Vector2 v, int scale)
+        {
+            return new Vector2(v.X * scale, v.Y * scale);
         }
 
         public static Vector2 operator -(Vector2 v)
