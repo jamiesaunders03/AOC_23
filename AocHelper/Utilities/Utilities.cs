@@ -56,6 +56,24 @@ namespace AocHelper.Utilities
             
             return false;
         }
+
+        /// <summary>
+        /// Swaps the given rows in the 2d array
+        /// </summary>
+        /// <param name="arr">The array to swap the rows of</param>
+        /// <param name="r1">The index of the first row</param>
+        /// <param name="r2">The index of the second row</param>
+        public static void SwapRow<T>(T[,] arr, int r1, int r2)
+        {
+            if (r1 == r2)
+                return;
+
+            int cols = arr.GetLength(1);
+            for (int i = 0; i < cols; ++i)
+            {
+                (arr[r1, i], arr[r2, i]) = (arr[r2, i], arr[r1, i]);
+            }
+        }
         
         /// <summary>
         /// Indexes an array of strings using a vector
