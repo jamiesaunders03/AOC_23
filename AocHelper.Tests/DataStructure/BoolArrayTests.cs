@@ -1,6 +1,6 @@
 using AocHelper.DataStructures;
 
-namespace AocHelper.Tests
+namespace AocHelper.Tests.DataStructure
 {
     [TestClass]
     public class BoolArrayTests

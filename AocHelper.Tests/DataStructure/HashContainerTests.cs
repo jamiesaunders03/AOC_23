@@ -1,6 +1,6 @@
 using AocHelper.Utilities;
 
-namespace AocHelper.Tests
+namespace AocHelper.Tests.DataStructure
 {
     [TestClass]
     public class HashContainerTests
