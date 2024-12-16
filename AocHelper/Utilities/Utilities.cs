@@ -34,7 +34,7 @@ namespace AocHelper.Utilities
         /// <returns></returns>
         public static char VectorIndex(string[] strs, Vector2 vec)
         {
-            return strs[vec.Y][vec.X];
+            return strs[(int)vec.Y][(int)vec.X];
         }
         
         /// <summary>

@@ -88,8 +88,8 @@ internal class Day06 : IAocChallenge
 
     private static int GetPosDirScore(Vector2 pos, Vector2 dir)
     {
-        int score = pos.X + 1_000 * pos.Y;
-        score += 1_000_000 * dir.X + 2_000_000 * dir.Y;
+        int score = (int)(pos.X + 1_000 * pos.Y);
+        score += (int)(1_000_000 * dir.X + 2_000_000 * dir.Y);
 
         return score;
     }

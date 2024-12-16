@@ -7,17 +7,17 @@ namespace AocHelper.DataStructures
         /// <summary>
         /// The vectors X component
         /// </summary>
-        public int X { get; }
+        public long X { get; }
 
         /// <summary>
         /// The vectors Y component
         /// </summary>
-        public int Y { get; }
+        public long Y { get; }
 
         /// <summary>
         /// Create a new vector at the given (x, y) co-ordinates
         /// </summary>
-        public Vector2(int x, int y)
+        public Vector2(long x, long y)
         {
             X = x;
             Y = y;
@@ -88,7 +88,7 @@ namespace AocHelper.DataStructures
             return new Vector2(v1.X - v2.X, v1.Y - v2.Y);
         }
         
-        public static Vector2 operator *(Vector2 v, int scale)
+        public static Vector2 operator *(Vector2 v, long scale)
         {
             return new Vector2(v.X * scale, v.Y * scale);
         }
@@ -162,7 +162,7 @@ namespace AocHelper.DataStructures
         /// </summary>
         /// <param name="v">The vector to get the distance to</param>
         /// <returns></returns>
-        public int Manhattan(Vector2 v)
+        public long Manhattan(Vector2 v)
         {
             return Math.Abs(X - v.X) + Math.Abs(Y - v.Y);
         }
@@ -172,7 +172,7 @@ namespace AocHelper.DataStructures
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        public int MaxDimDistance(Vector2 v)
+        public long MaxDimDistance(Vector2 v)
         {
             return Math.Max(Math.Abs(X - v.X), Math.Abs(Y - v.Y));
         }

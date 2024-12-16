@@ -196,7 +196,7 @@ internal class Day12 : IAocChallenge
 
         int GetProp(Vector2 v)
         {
-            return prop % 2 == 0 ? v.Y : v.X;
+            return (int)(prop % 2 == 0 ? v.Y : v.X);
         }
     }
 }
