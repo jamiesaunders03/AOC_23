@@ -76,12 +76,12 @@ namespace AOC_23.Challenges
                     int dist = GetDist(space, m.Position, m.Steps, prevDirIndex) + _heatMap[move.Y][move.X];
                     if (sameDirection)
                     {
-                        if (SetPosition(ref space, (move.X, move.Y), dist, m.Steps + 1, curDirIndex, minDist, maxDist))
+                        if (SetPosition(ref space, ((int)move.X, (int)move.Y), dist, m.Steps + 1, curDirIndex, minDist, maxDist))
                             movements.Add(new Movement(move, move - m.Position, m.Steps + 1));
                     }
                     else
                     {
-                        if (SetPosition(ref space, (move.X, move.Y), dist, 0, curDirIndex, minDist, maxDist))
+                        if (SetPosition(ref space, ((int)move.X, (int)move.Y), dist, 0, curDirIndex, minDist, maxDist))
                             movements.Add(new Movement(move, move - m.Position, 0));
                     }
                 }
@@ -147,7 +147,7 @@ namespace AOC_23.Challenges
 
         private int GetDist(in Dictionary<int, int[,]> space, Vector2 pos, int depth, int dir)
         {
-            if (space.TryGetValue(pos.Y * _heatMap[0].Length + pos.X, out int[,] moves))
+            if (space.TryGetValue((int)(pos.Y * _heatMap[0].Length + pos.X), out int[,] moves))
             {
                 return moves[depth, dir];
             }

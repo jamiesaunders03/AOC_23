@@ -82,11 +82,11 @@ namespace AOC_23.Challenges
 
         private List<Visitor> MoveBeam(Visitor v)
         {
-            List<Visitor> newBeams = _mirrors[v.Position.Y][v.Position.X] switch
+            List<Visitor> newBeams = _mirrors[v.Position.Y][(int)v.Position.X] switch
             {
                 '.' => new List<Visitor> { new(v.Direction, v.Position + v.Direction) },
-                '|' => SplitVector(v, _mirrors[v.Position.Y][v.Position.X]),
-                '-' => SplitVector(v, _mirrors[v.Position.Y][v.Position.X]),
+                '|' => SplitVector(v, _mirrors[v.Position.Y][(int)v.Position.X]),
+                '-' => SplitVector(v, _mirrors[v.Position.Y][(int)v.Position.X]),
                 '/' => new List<Visitor> { Reflect(v, inverse: true) },
                 '\\' => new List<Visitor> { Reflect(v) },
                 _ => throw new Exception(),

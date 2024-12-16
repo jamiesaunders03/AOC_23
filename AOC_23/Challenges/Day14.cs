@@ -113,12 +113,12 @@ namespace AOC_23.Challenges
             Comparison<Obstruction> comparator;
             if (isVertical)
             {
-                selector = obstruction => obstruction.Position.X;
+                selector = obstruction => (int)obstruction.Position.X;
                 comparator = (obs1, obs2) => obs1.Position.Y.CompareTo(obs2.Position.Y);
             }
             else
             {
-                selector = obstruction => obstruction.Position.Y;
+                selector = obstruction => (int)obstruction.Position.Y;
                 comparator = (obs1, obs2) => obs1.Position.X.CompareTo(obs2.Position.X);
             }
 
@@ -140,10 +140,10 @@ namespace AOC_23.Challenges
 
         private HashContainer<int> GetPositionSet(List<Obstruction>[] columns)
         {
-            var vals = columns
+            List<int> vals = columns
                 .SelectMany(col => col
                     .Where(obs => obs.Type == 'O')
-                    .Select(obs => obs.Position.X + obs.Position.Y * _height))
+                    .Select(obs => (int)(obs.Position.X + obs.Position.Y * _height)))
                 .ToList();
             vals.Sort();
 
