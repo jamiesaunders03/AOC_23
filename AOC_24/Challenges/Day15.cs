@@ -31,7 +31,7 @@ internal class Day15 : IAocChallenge
 
     public string Challenge1()
     {
-        Dictionary<Vector2, IObject> map = ParseStandardMapMap(_mapStr[0].Split('\n'));
+        Dictionary<Vector2, IObject> map = ParseStandardMap(_mapStr);
         KeyValuePair<Vector2, IObject> robotPos = map.First(o => o.Value.GetType() == typeof(Robot));
         var robot = new Pair<Vector2, Robot>(robotPos.Key, (Robot)robotPos.Value);
         
@@ -54,14 +54,32 @@ internal class Day15 : IAocChallenge
 
     public string Challenge2()
     {
-        throw new NotImplementedException();
+        Dictionary<Vector2, IObject> map = ParseWideMap(_mapStr);
+        KeyValuePair<Vector2, IObject> robotPos = map.First(o => o.Value.GetType() == typeof(WideRobot));
+        var robot = new Pair<Vector2, WideRobot>(robotPos.Key, (WideRobot)robotPos.Value);
+        
+        foreach (Vector2 move in _moves)
+        {
+            if (robot.Second.CanMove(robot.First, move, map))
+            {
+                robot.Second.Move(robot.First, move, map);
+                robot = new Pair<Vector2, WideRobot>(robot.First + move, robot.Second);
+            }
+        }
+
+        long total = map
+            .Where(o => o.Value.GetType() == typeof(WideBox))
+            .Select(b => b.Key.X + 100 * b.Key.Y)
+            .Sum();
+        
+        return total.ToString();
     }
 
-    private static Dictionary<Vector2, IObject> ParseStandardMapMap(string[] map)
+    private static Dictionary<Vector2, IObject> ParseStandardMap(string[] map)
     {
         Dictionary<Vector2, IObject> items = new();
         
-        foreach (GridPointer<char> gp in Enumeration.EnumerateArray(map))
+        foreach (GridPointer<char> gp in Enumeration.EnumerateArray(map.ToGrid()))
         {
             var pos = new Vector2(gp.Pos.Y, gp.Pos.X);
             switch (gp.Value)
@@ -74,6 +92,30 @@ internal class Day15 : IAocChallenge
                     break;
                 case '@':
                     items.Add(pos, new Robot());
+                    break;
+            }
+        }
+
+        return items;
+    }
+    
+    private static Dictionary<Vector2, IObject> ParseWideMap(string[] map)
+    {
+        Dictionary<Vector2, IObject> items = new();
+        
+        foreach (GridPointer<char> gp in Enumeration.EnumerateArray(map.ToGrid()))
+        {
+            var pos = new Vector2(gp.Pos.Y * 2, gp.Pos.X);
+            switch (gp.Value)
+            {
+                case '#':
+                    items.Add(pos, new Wall());
+                    break;
+                case 'O':
+                    items.Add(pos, new WideBox());
+                    break;
+                case '@':
+                    items.Add(pos, new WideRobot());
                     break;
             }
         }
@@ -136,6 +178,80 @@ internal class Day15 : IAocChallenge
         }
 
         public void Move(Vector2 pos, Vector2 dir, Dictionary<Vector2, IObject> map) { }
+    }
+
+    private abstract class WideEntity : IObject
+    {
+        /// <summary>
+        /// Check if the object can move in the desired direction
+        /// </summary>
+        /// <param name="pos">The current pos of the object</param>
+        /// <param name="dir">The required direction to move</param>
+        /// <param name="map">The map state</param>
+        public bool CanMove(Vector2 pos, Vector2 dir, Dictionary<Vector2, IObject> map)
+        {
+            foreach (Vector2 movePos in GetTargetPos(pos, dir, map))
+            {
+                if (map.TryGetValue(movePos, out IObject? moveable) && !moveable.CanMove(movePos, dir, map))
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Move the current object in the given direction
+        /// </summary>
+        /// <param name="pos">The current pos of the object</param>
+        /// <param name="dir">The required direction to move</param>
+        /// <param name="map">The map state</param>
+        public void Move(Vector2 pos, Vector2 dir, Dictionary<Vector2, IObject> map)
+        {
+            foreach (Vector2 movePos in GetTargetPos(pos, dir, map))
+            {
+                if (map.TryGetValue(movePos, out IObject? obj))
+                {
+                    obj.Move(movePos, dir, map);
+                }
+            }
+            
+            map[pos + dir] = map[pos];
+            map.Remove(pos);
+        }
+
+        protected abstract ICollection<Vector2> GetTargetPos(Vector2 pos, Vector2 dir, Dictionary<Vector2, IObject> map);
+    }
+
+    private class WideBox : WideEntity
+    {
+        protected override ICollection<Vector2> GetTargetPos(Vector2 pos, Vector2 dir, Dictionary<Vector2, IObject> map)
+        {
+            if (dir == Vector2.Up || dir == Vector2.Down)
+            {
+                return [ pos + dir + Vector2.Left, pos + dir, pos + dir + Vector2.Right ];
+            }
+          
+            return [pos + dir * 2];
+        }
+    }
+
+    private class WideRobot : WideEntity
+    {
+        protected override Vector2[] GetTargetPos(Vector2 pos, Vector2 dir, Dictionary<Vector2, IObject> map)
+        {
+            if (dir == Vector2.Up || dir == Vector2.Down)
+            {
+                return [ pos + dir + Vector2.Left, pos + dir ];
+            }
+            else if (dir == Vector2.Right)
+            {
+                return [ pos + dir ];
+            }
+            else
+            {
+                return [pos + dir * 2];
+            }
+        }
     }
 
     #endregion End Data Structures
