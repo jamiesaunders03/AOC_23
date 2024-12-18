@@ -63,6 +63,8 @@ internal partial class Day17 : IAocChallenge
 
     public string Challenge2()
     {
+        return "";
+        
         HashSet<long> solutions = BackTrack();
         long min = solutions.Min();
 
