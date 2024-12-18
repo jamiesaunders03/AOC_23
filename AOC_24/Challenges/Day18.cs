@@ -1,6 +1,7 @@
-﻿using System.Collections;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+
 using AocHelper;
+using AocHelper.Algorithms;
 using AocHelper.DataStructures;
 using AocHelper.Utilities;
 
@@ -49,10 +50,15 @@ internal class Day18 : IAocChallenge
         Vector2 start = new(0, 0);
         Vector2 end = new(SIZE - 1, SIZE - 1);
 
+        HashSet<Vector2> shortestPath = _bytes.ToHashSet();
+
         while (true)
         {
-            // could optimize by computing actual shortest
-            // path and only re-calculating when a tile falls on to that path
+            if (!shortestPath.Contains(_bytes[drops]))
+            {
+                ++drops;
+                continue;
+            }
             
             int[,] map = Utilities.Initialize(int.MaxValue, SIZE, SIZE);
             for (int i = 0; i < drops; ++i)
@@ -66,6 +72,7 @@ internal class Day18 : IAocChallenge
                 break;
 
             ++drops;
+            shortestPath = PathFinding.GetShortestPathFromMaze(map, start, end).ToHashSet();
         }
 
         Vector2 blocker = _bytes[drops - 1];
