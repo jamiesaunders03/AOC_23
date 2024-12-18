@@ -26,3 +26,6 @@ ChallengeRunner.RunChallenge<Day10>(timeReporter);
 ChallengeRunner.RunChallenge<Day11>(timeReporter);
 ChallengeRunner.RunChallenge<Day12>(timeReporter);
 ChallengeRunner.RunChallenge<Day13>(timeReporter);
+ChallengeRunner.RunChallenge<Day14>(timeReporter);
+ChallengeRunner.RunChallenge<Day15>(timeReporter);
+ChallengeRunner.RunChallenge<Day16>(timeReporter);
