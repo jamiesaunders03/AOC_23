@@ -254,6 +254,41 @@ namespace AocHelper.DataStructures
                 this + Up + Left,
             };
         }
+        
+        /// <summary>
+        /// Returns all the vectors that are within `range` of the current vector
+        /// This is vectors with values `Vector2([x - range, x + range], [y - range, y + range])` exclusing the
+        /// current vector.
+        /// </summary>
+        /// <param name="range">The range of tiles to search</param>
+        /// <returns></returns>
+        public ICollection<Vector2> Surrounding(int range)
+        {
+            if (range <= 0)
+                return [];
+
+            List<Vector2> points = [];
+
+            for (int i = -range; i <= range; ++i)
+                for (int j = -range; j <= range; ++j)
+                    if (i != 0 || j != 0)
+                        points.Add(new Vector2(i + X, j + Y));
+            
+            return points;
+        }
+        
+        /// <summary>
+        /// Returns all the vectors that are within Manhatten distance `range` of the current vector
+        /// This excludes the current vector.
+        /// </summary>
+        /// <param name="range">The range of tiles to search</param>
+        /// <returns></returns>
+        public ICollection<Vector2> Nearby(int range)
+        {
+            return Surrounding(range)
+                .Where(v => v.Manhattan(this) <= range)
+                .ToList();
+        }
 
         #endregion
     }
