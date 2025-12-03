@@ -14,9 +14,9 @@ namespace AocHelper
         /// Runs the challenge for the given day, printing out the results and timings for the challenge.
         /// </summary>
         /// <typeparam name="T">The challenge to run</typeparam>
-        public static void RunChallenge<T>() where T : IAocChallenge, new()
+        public static void RunChallenge<T>(bool testAssert = false) where T : IAocChallenge, new()
         {
-            RunChallenge<T>(Console.WriteLine);
+            RunChallenge<T>(Console.WriteLine, testAssert);
         }
 
         /// <summary>
@@ -24,26 +24,40 @@ namespace AocHelper
         /// additional info to the given notifier
         /// </summary>
         /// <param name="notifier">Handles verbose info such as timing of challenges</param>
+        /// <param name="testAssert">Whether to run test cases</param>
         /// <typeparam name="T">The challenge to run</typeparam>
-        public static void RunChallenge<T>(Action<string> notifier) where T : IAocChallenge, new()
+        public static void RunChallenge<T>(Action<string> notifier, bool testAssert = false) where T : IAocChallenge, new()
         {
             _logger.InfoFormat("Creating challenge of type {0}", typeof(T).Name);
             notifier($"Creating instance of {typeof(T).Name}");
             TimeSpan t = RunAction(() => new T(), out object day);
-            var challenge = day as IAocChallenge;
-            notifier($"Time elapsed: {t}s\n");
+            var challenge = (IAocChallenge)day;
+            notifier($"   Time elapsed: {t}s");
+
+            if (testAssert && day is ITestAssert ta)
+            {
+                List<string> testResults = ta.Assert();
+                if (testResults.Count == 0)
+                    Console.WriteLine("All tests pass");
+                else
+                {
+                    Console.WriteLine("The following tests failed:");
+                    foreach (string testcase in testResults)
+                        Console.WriteLine($"  - {testcase}");
+                }
+            }
 
             _logger.Info("Starting challenge 1");
             t = RunAction(challenge.Challenge1, out object part1);
-            Console.WriteLine($"Day {challenge.Day} - Challenge 1: {part1}");
-            notifier($"Time elapsed: {t}s\n");
+            Console.WriteLine($"Challenge 1: {part1}");
+            notifier($"   Time elapsed: {t}s");
 
             try
             {
                 _logger.Info("Starting challenge 2");
                 t = RunAction(challenge.Challenge2, out object part2);
-                Console.WriteLine($"Day {challenge.Day} - Challenge 2: {part2}");
-                notifier($"Time elapsed: {t}s\n");
+                Console.WriteLine($"Challenge 2: {part2}");
+                notifier($"   Time elapsed: {t}s");
             }
             catch (NotImplementedException)
             {
