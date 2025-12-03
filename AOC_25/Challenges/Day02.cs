@@ -14,7 +14,7 @@ public class Day02 : IAocChallenge
 
     #endregion
 
-    private static List<Range> _ranges;
+    private readonly List<Range> _ranges;
 
     public Day02()
     {

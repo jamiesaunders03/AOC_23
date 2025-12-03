@@ -14,9 +14,9 @@ namespace AocHelper
         /// Runs the challenge for the given day, printing out the results and timings for the challenge.
         /// </summary>
         /// <typeparam name="T">The challenge to run</typeparam>
-        public static void RunChallenge<T>(bool testAssert = false) where T : IAocChallenge, new()
+        public static void RunChallenge<T>() where T : IAocChallenge, new()
         {
-            RunChallenge<T>(Console.WriteLine, testAssert);
+            RunChallenge<T>(Console.WriteLine);
         }
 
         /// <summary>
@@ -24,9 +24,8 @@ namespace AocHelper
         /// additional info to the given notifier
         /// </summary>
         /// <param name="notifier">Handles verbose info such as timing of challenges</param>
-        /// <param name="testAssert">Whether to run test cases</param>
         /// <typeparam name="T">The challenge to run</typeparam>
-        public static void RunChallenge<T>(Action<string> notifier, bool testAssert = false) where T : IAocChallenge, new()
+        public static void RunChallenge<T>(Action<string> notifier) where T : IAocChallenge, new()
         {
             _logger.InfoFormat("Creating challenge of type {0}", typeof(T).Name);
             notifier($"Creating instance of {typeof(T).Name}");
@@ -34,7 +33,7 @@ namespace AocHelper
             var challenge = (IAocChallenge)day;
             notifier($"   Time elapsed: {t}s");
 
-            if (testAssert && day is ITestAssert ta)
+            if (day is ITestAssert ta)
             {
                 List<string> testResults = ta.Assert();
                 if (testResults.Count == 0)

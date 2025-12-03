@@ -15,3 +15,4 @@ Action<string> timeReporter = VERBOSE ? Console.WriteLine : _ => { };
 
 ChallengeRunner.RunChallenge<Day01>(timeReporter);
 ChallengeRunner.RunChallenge<Day02>(timeReporter);
+ChallengeRunner.RunChallenge<Day03>(timeReporter);
