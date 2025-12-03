@@ -18,7 +18,7 @@ public class Day02 : IAocChallenge
 
     public Day02()
     {
-        _logger.Info($"Constructing {nameof(Day01)} Solver");
+        _logger.Info($"Constructing {GetType().Name} Solver");
         
         string[] input = new FetchData(Day, 2025).ReadInput().TrimEnd().Split(',');
         _ranges = input.Select(s => {
@@ -35,7 +35,7 @@ public class Day02 : IAocChallenge
     /// </summary>
     public string Challenge1()
     {
-        _logger.Info($"Starting {nameof(Day02)} Part 1");
+        _logger.Info($"Starting {GetType().Name} Part 1");
 
         long total = 0;
         foreach (Range r in _ranges)
@@ -66,7 +66,7 @@ public class Day02 : IAocChallenge
     /// </summary>
     public string Challenge2()
     {
-        _logger.Info($"Starting {nameof(Day02)} Part 2");
+        _logger.Info($"Starting {GetType().Name} Part 2");
         
         long total = 0;
         foreach (Range r in _ranges)

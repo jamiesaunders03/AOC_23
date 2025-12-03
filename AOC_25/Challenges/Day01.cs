@@ -15,7 +15,7 @@ public class Day01 : IAocChallenge
     
     public Day01()
     {
-        _logger.Info($"Constructing {nameof(Day01)} Solver");
+        _logger.Info($"Constructing {GetType().Name} Solver");
         
         string[] input = new FetchData(Day, 2025).ReadInput().TrimEnd().Split('\n');
 
@@ -34,7 +34,7 @@ public class Day01 : IAocChallenge
     /// </summary>
     public string Challenge1()
     {
-        _logger.Info($"Starting {nameof(Day01)} Part 1");
+        _logger.Info($"Starting {GetType().Name} Part 1");
 
         int count = 0;
         int currentPos = START_POS;
@@ -54,7 +54,7 @@ public class Day01 : IAocChallenge
     /// </summary>
     public string Challenge2()
     {
-        _logger.Info($"Starting {nameof(Day01)} Part 2");
+        _logger.Info($"Starting {GetType().Name} Part 2");
         
         int count = 0;
         int currentPos = START_POS;

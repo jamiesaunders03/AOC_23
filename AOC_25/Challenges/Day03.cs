@@ -7,7 +7,7 @@ public class Day03 : IAocChallenge
 {
     #region Boilerplate
 
-    private static readonly ILog _logger = LogManager.GetLogger(typeof(Day02));
+    private static readonly ILog _logger = LogManager.GetLogger(typeof(Day03));
 
     public int Day => 3;
 
@@ -17,7 +17,7 @@ public class Day03 : IAocChallenge
 
     public Day03()
     {
-        _logger.Info($"Constructing {nameof(Day01)} Solver");
+        _logger.Info($"Constructing {GetType().Name} Solver");
 
         string[] input = new FetchData(Day, 2025).ReadInput().TrimEnd().Split('\n');
         foreach (string row in input)
@@ -35,6 +35,8 @@ public class Day03 : IAocChallenge
     /// </summary>
     public string Challenge1()
     {
+        _logger.Info($"Starting {GetType().Name} Part 1");
+        
         long totalJolts = 0;
         foreach (List<byte> joltBattery in _batteryArray)
             totalJolts += GetTotalJolts(joltBattery, 2);
@@ -47,6 +49,8 @@ public class Day03 : IAocChallenge
     /// </summary>
     public string Challenge2()
     {
+        _logger.Info($"Starting {GetType().Name} Part 2");
+        
         long totalJolts = 0;
         foreach (List<byte> joltBattery in _batteryArray)
             totalJolts += GetTotalJolts(joltBattery, 12);
