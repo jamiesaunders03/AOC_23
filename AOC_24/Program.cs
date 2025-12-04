@@ -33,3 +33,4 @@ ChallengeRunner.RunChallenge<Day17>(timeReporter);
 // ChallengeRunner.RunChallenge<Day18>(timeReporter);
 // ChallengeRunner.RunChallenge<Day19>(timeReporter);
 // ChallengeRunner.RunChallenge<Day20>(timeReporter);
+ChallengeRunner.RunChallenge<Day21>(timeReporter);

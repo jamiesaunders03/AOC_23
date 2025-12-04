@@ -30,20 +30,33 @@ namespace AocHelper
             _logger.InfoFormat("Creating challenge of type {0}", typeof(T).Name);
             notifier($"Creating instance of {typeof(T).Name}");
             TimeSpan t = RunAction(() => new T(), out object day);
-            var challenge = day as IAocChallenge;
-            notifier($"Time elapsed: {t}s\n");
+            var challenge = (IAocChallenge)day;
+            notifier($"   Time elapsed: {t}s");
+
+            if (day is ITestAssert ta)
+            {
+                List<string> testResults = ta.Assert();
+                if (testResults.Count == 0)
+                    Console.WriteLine("All tests pass");
+                else
+                {
+                    Console.WriteLine("The following tests failed:");
+                    foreach (string testcase in testResults)
+                        Console.WriteLine($"  - {testcase}");
+                }
+            }
 
             _logger.Info("Starting challenge 1");
             t = RunAction(challenge.Challenge1, out object part1);
-            Console.WriteLine($"Day {challenge.Day} - Challenge 1: {part1}");
-            notifier($"Time elapsed: {t}s\n");
+            Console.WriteLine($"Challenge 1: {part1}");
+            notifier($"   Time elapsed: {t}s");
 
             try
             {
                 _logger.Info("Starting challenge 2");
                 t = RunAction(challenge.Challenge2, out object part2);
-                Console.WriteLine($"Day {challenge.Day} - Challenge 2: {part2}");
-                notifier($"Time elapsed: {t}s\n");
+                Console.WriteLine($"Challenge 2: {part2}");
+                notifier($"   Time elapsed: {t}s");
             }
             catch (NotImplementedException)
             {

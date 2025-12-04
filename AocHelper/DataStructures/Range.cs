@@ -10,5 +10,13 @@
             Start = start;
             Length = length;
         }
+
+        /// <summary>
+        /// Whether the given range contains the number provided
+        /// </summary>
+        public bool Contains(long number)
+        {
+            return Start <= number && number <= Start + Length;
+        }
     }
 }
