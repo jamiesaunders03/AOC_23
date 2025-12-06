@@ -1,17 +1,11 @@
-﻿using log4net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NLog;
 
 namespace AocHelper
 {
     internal class InputSave
     {
         private const string CACHE_PATH = ".cache/Input/{0}/";
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public int Year { get; }
         public int Day { get; }

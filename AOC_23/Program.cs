@@ -1,13 +1,8 @@
-﻿using System.Reflection;
-
-using log4net;
-
-using AocHelper;
+﻿using AocHelper;
 using AOC_23.Challenges;
+using NLog;
 
-log4net.Config.XmlConfigurator.Configure();
-
-ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+Logger logger = LogManager.GetCurrentClassLogger();
 logger.Info("Starting challenge runner");
 
 ChallengeRunner.RunChallenge<Day19>();

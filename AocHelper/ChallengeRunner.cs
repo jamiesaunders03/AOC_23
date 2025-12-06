@@ -1,13 +1,12 @@
 ﻿using System.Diagnostics;
-using System.Reflection;
 
-using log4net;
+using NLog;
 
 namespace AocHelper
 {
     public class ChallengeRunner 
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly Stopwatch _sw = new();
 
         /// <summary>
@@ -27,7 +26,7 @@ namespace AocHelper
         /// <typeparam name="T">The challenge to run</typeparam>
         public static void RunChallenge<T>(Action<string> notifier) where T : IAocChallenge, new()
         {
-            _logger.InfoFormat("Creating challenge of type {0}", typeof(T).Name);
+            _logger.Info("Creating challenge of type {}", typeof(T).Name);
             notifier($"Creating instance of {typeof(T).Name}");
             TimeSpan t = RunAction(() => new T(), out object day);
             var challenge = (IAocChallenge)day;

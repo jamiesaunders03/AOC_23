@@ -1,5 +1,5 @@
 ﻿using AocHelper;
-using log4net;
+using NLog;
 using Range = AocHelper.DataStructures.Range;
 
 namespace AOC_25.Challenges;
@@ -8,7 +8,7 @@ public class Day02 : IAocChallenge
 {
     #region Boilerplate
 
-    private static readonly ILog _logger = LogManager.GetLogger(typeof(Day02));
+    private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
     
     public int Day => 2;
 

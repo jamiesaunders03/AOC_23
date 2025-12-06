@@ -10,10 +10,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="log4net" Version="2.0.15" />
         <PackageReference Include="coverlet.collector" Version="3.2.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
+        <PackageReference Include="NLog" Version="6.0.6" />
+        <PackageReference Include="NLog.Config" Version="4.7.15" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="6.1.0" />
         <PackageReference Include="NUnit" Version="3.13.3"/>
         <PackageReference Include="NUnit3TestAdapter" Version="4.2.1"/>
         <PackageReference Include="NUnit.Analyzers" Version="3.6.1"/>
@@ -22,6 +24,12 @@
 
     <ItemGroup>
         <ProjectReference Include="..\AocHelper\AocHelper.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="nlog.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

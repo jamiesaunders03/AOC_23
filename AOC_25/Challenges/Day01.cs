@@ -1,12 +1,11 @@
-﻿using System.Reflection;
-using AocHelper;
-using log4net;
+﻿using AocHelper;
+using NLog;
 
 namespace AOC_25.Challenges;
 
 public class Day01 : IAocChallenge
 {
-    private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
     
     public int Day => 1;
 
@@ -82,6 +81,6 @@ public class Day01 : IAocChallenge
             }
         }
         
-        return count.ToString();  // 6358
+        return count.ToString();
     }
 }

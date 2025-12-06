@@ -1,13 +1,12 @@
 ﻿using AocHelper.DataSources;
-using log4net;
-using System.Reflection;
+using NLog;
 
 namespace AocHelper
 {
     public class FetchData
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private IInputDataFetcher[] _dataSources = Array.Empty<IInputDataFetcher>();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private IInputDataFetcher[] _dataSources = [];
 
         public int Day { get; }
         public int Year { get; }

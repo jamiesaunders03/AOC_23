@@ -1,13 +1,12 @@
 ﻿using AocHelper.Utilities;
-using log4net;
-using System.Reflection;
+using NLog;
 
 namespace AocHelper.DataSources
 {
     internal class WebRequestData : IInputDataFetcher
     {
         private const string URL = "https://adventofcode.com/{0}/day/{1}/input";
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public int Day { get; }
         public int Year { get; }

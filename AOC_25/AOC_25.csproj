@@ -8,11 +8,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="log4net" Version="3.2.0" />
+      <ProjectReference Include="..\AocHelper\AocHelper.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AocHelper\AocHelper.csproj" />
+      <PackageReference Include="NLog" Version="6.0.6" />
+      <PackageReference Include="NLog.Config" Version="4.7.15" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="6.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="nlog.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

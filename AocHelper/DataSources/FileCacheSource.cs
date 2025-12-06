@@ -1,12 +1,10 @@
-﻿using System.Reflection;
-
-using log4net;
+﻿using NLog;
 
 namespace AocHelper.DataSources
 {
     internal class FileCacheSource : IInputDataFetcher
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// The day of the challenge
@@ -20,7 +18,7 @@ namespace AocHelper.DataSources
 
         public FileCacheSource(int day, int year)
         {
-            _logger.DebugFormat("Creating file loader instance for challenge {0}-12-{1}", day, year);
+            _logger.Debug("Creating file loader instance for challenge {}-12-{}", day, year);
 
             Day = day;
             Year = year;
