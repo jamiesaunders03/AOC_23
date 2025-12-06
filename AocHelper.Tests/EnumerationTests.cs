@@ -1,4 +1,5 @@
 ﻿using AocHelper.Utilities;
+using Math = System.Math;
 
 namespace AocHelper.Tests;
 
@@ -61,5 +62,19 @@ public class EnumerationTests
         var lst = new List<int> { 1, 2, 3, };
         Assert.That(() => Enumeration.Combinations(lst, 0), Throws.ArgumentException);
         Assert.That(() => Enumeration.Combinations(lst, 4), Throws.ArgumentException);
+    }
+
+    [Test]
+    public void TestProduct()
+    {
+        List<long> items = [];
+        Assert.That(items.Prod(), Is.Zero);
+
+        items = [2, 4, 9, -2];
+        Assert.That(items.Prod(), Is.EqualTo(-144));
+        Assert.That(items.Select(Math.Abs).Prod(), Is.EqualTo(144));
+
+        items = [0, 7, 1];
+        Assert.That(items.Prod(), Is.Zero);
     }
 }

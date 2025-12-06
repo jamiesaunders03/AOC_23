@@ -113,6 +113,51 @@ namespace AocHelper.Utilities
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// The product of the items in this enumeration.
+        /// Returns 0 for an empty collection.
+        /// </summary>
+        /// <param name="items">The items to product.</param>
+        /// <returns>The product of all items in the collection</returns>
+        public static long Prod(this IEnumerable<long> items)
+        {
+            long prod = 0;
+            bool itered = false;
+            
+            foreach (long item in items)
+            {
+                if (!itered)
+                {
+                    prod = item;
+                    itered = true;
+                }
+                else
+                    prod *= item;
+            }
+
+            return prod;
+        }
+
+        /// <summary>
+        /// Interpret the given char array as a number
+        /// E.g. { '4', '7', '2' } would be the number 472.
+        ///
+        /// Note: no value checking is done on the chars provided, they are assumed to all lie in the range ['0', '9']
+        /// </summary>
+        /// <param name="chars">The char array to interpret</param>
+        /// <returns>The numeric representation of the number</returns>
+        public static long InterpretAsLong(this ICollection<char> chars)
+        {
+            long total = 0;
+            foreach (char c in chars)
+            {
+                total *= 10;
+                total += c - '0';
+            }
+
+            return total;
+        }
+
         #endregion
     }
 }
