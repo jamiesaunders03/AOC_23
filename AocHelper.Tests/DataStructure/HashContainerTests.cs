@@ -2,10 +2,9 @@ using AocHelper.Utilities;
 
 namespace AocHelper.Tests.DataStructure
 {
-    [TestClass]
     public class HashContainerTests
     {
-        [TestMethod]
+        [Test]
         public void TestHashContainerHashMethod()
         {
             int[] arr1 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, };
@@ -14,10 +13,10 @@ namespace AocHelper.Tests.DataStructure
             HashContainer<int> hc1 = new(arr1);
             HashContainer<int> hc2 = new(arr2);
 
-            Assert.AreEqual(hc1.GetHashCode(), hc2.GetHashCode());
+            Assert.That(hc1.GetHashCode(), Is.EqualTo(hc2.GetHashCode()));
         }
 
-        [TestMethod]
+        [Test]
         public void TestHashContainerEq()
         {
             int[] arr1 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, };
@@ -26,10 +25,10 @@ namespace AocHelper.Tests.DataStructure
             HashContainer<int> hc1 = new(arr1);
             HashContainer<int> hc2 = new(arr2);
 
-            Assert.AreEqual(hc1, hc2);
+            Assert.That(hc1, Is.EqualTo(hc2));
         }
 
-        [TestMethod]
+        [Test]
         public void TestHashingHashContainer()
         {
             int[] arr1 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, };
@@ -37,13 +36,13 @@ namespace AocHelper.Tests.DataStructure
 
             HashContainer<int> hc1 = new(arr1);
             HashContainer<int> hc2 = new(arr2);
-            HashSet<HashContainer<int>> container = new() { hc1, };
+            HashSet<HashContainer<int>> container = [ hc1 ];
 
-            Assert.IsTrue(container.Contains(hc1));
-            Assert.IsTrue(container.Contains(hc2));
+            Assert.That(container.Contains(hc1), Is.True);
+            Assert.That(container.Contains(hc2), Is.True);
         }
 
-        [TestMethod]
+        [Test]
         public void TestHashContainerAsKey()
         {
             int[] arr1 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, };
@@ -53,8 +52,8 @@ namespace AocHelper.Tests.DataStructure
             HashContainer<int> hc2 = new(arr2);
             Dictionary<HashContainer<int>, int> container = new() { [hc1] = 1 };
 
-            Assert.IsTrue(container.TryGetValue(hc2, out int x));
-            Assert.AreEqual(x, 1);
+            Assert.That(container.TryGetValue(hc2, out int x), Is.True);
+            Assert.That(x, Is.EqualTo(1));
         }
     }
 }

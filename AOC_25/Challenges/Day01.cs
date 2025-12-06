@@ -1,11 +1,12 @@
-﻿using AocHelper;
+﻿using System.Reflection;
+using AocHelper;
 using log4net;
 
 namespace AOC_25.Challenges;
 
 public class Day01 : IAocChallenge
 {
-    private static readonly ILog _logger = LogManager.GetLogger(typeof(Day01));
+    private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     
     public int Day => 1;
 

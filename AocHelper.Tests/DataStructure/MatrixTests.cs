@@ -2,10 +2,9 @@
 
 namespace AocHelper.Tests.DataStructure;
 
-[TestClass]
 public class MatrixTests
 {
-    [TestMethod]
+    [Test]
     public void TestMatMulIdentity()
     {
         var m1 = new Matrix(new[,]
@@ -14,7 +13,7 @@ public class MatrixTests
             { 0.0, 1.0 },
         });
         Matrix res = m1.MatMul(m1);
-        Assert.AreEqual(m1, res);
+        Assert.That(res, Is.EqualTo(m1));
         
         m1 = new Matrix(new[,]
         {
@@ -29,10 +28,10 @@ public class MatrixTests
             { 3.0, 0.0, 0.0 },
         });
         res = m1.MatMul(m2);
-        Assert.AreEqual(m2, res);
+        Assert.That(res, Is.EqualTo(m2));
     }
     
-    [TestMethod]
+    [Test]
     public void TestMatMul()
     {
         var m1 = new Matrix(new[,]
@@ -52,10 +51,10 @@ public class MatrixTests
         });
         
         Matrix res = m1.MatMul(m2);
-        Assert.AreEqual(expected, res);
+        Assert.That(res, Is.EqualTo(expected));
     }
 
-    [TestMethod]
+    [Test]
     public void TestDeterminant()
     {
         var m1 = new Matrix(new[,]
@@ -63,14 +62,14 @@ public class MatrixTests
             { 4.0, 1.0 }, 
             { 3.0, -2.0 },
         });
-        Assert.AreEqual(-11, m1.Determinant(), 1e-5);
+        Assert.That(m1.Determinant(), Is.EqualTo(-11).Within(1e-5));
         
         m1 = new Matrix(new[,]
         {
             { -2.0, -7.0 }, 
             { 1.0, 4.0 },
         });
-        Assert.AreEqual(-1, m1.Determinant(), 1e-5);
+        Assert.That(m1.Determinant(), Is.EqualTo(-1).Within(1e-5));
         
         m1 = new Matrix(new double[,]
         {
@@ -78,10 +77,10 @@ public class MatrixTests
             { 5, 7, 5 },
             { 2, 5, 0 },
         });
-        Assert.AreEqual(-65, m1.Determinant(), 1e-5);
+        Assert.That(m1.Determinant(), Is.EqualTo(-65).Within(1e-5));
     }
 
-    [TestMethod]
+    [Test]
     public void TestInvert()
     {
         var m1 = new Matrix(new[,]
@@ -95,16 +94,10 @@ public class MatrixTests
             { 0.1, 0.2 },
         });
         Matrix inverse = m1.Inverse();
+        Assert.That(inverse, Is.EqualTo(exp).Within(1e-5));
 
-        foreach ((double pred, double act) res in inverse.Zip(exp))
-        {
-            Assert.AreEqual(res.act, res.pred, 1e-5);
-        }
 
         Matrix identity = m1.MatMul(inverse);
-        foreach ((double pred, double act) res in identity.Zip(Matrix.Identity(2)))
-        {
-            Assert.AreEqual(res.act, res.pred, 1e-5);
-        }
+        Assert.That(identity, Is.EqualTo(Matrix.Identity(2)).Within(1e-5));
     }
 }

@@ -3,13 +3,12 @@ using AocHelper.AnswerCache;
 
 namespace AocHelper.Tests
 {
-    [TestClass]
     public class AnswerCache
     {
         private const int DAY = 0;
         private const int YEAR = 0;
         
-        [TestCleanup]
+        [TearDown]
         public void Cleanup()
         {
             try
@@ -22,12 +21,12 @@ namespace AocHelper.Tests
             { }
         }
         
-        [TestMethod]
+        [Test]
         public void TestAddClose()
         {
-            Assert.IsTrue(StoreAnswer.SaveAnswer("123", new Incorrect(), DAY, YEAR));
-            Assert.IsFalse(StoreAnswer.SaveAnswer("123", new Incorrect(), DAY, YEAR));
-            Assert.IsTrue(StoreAnswer.SaveAnswer("124", new Incorrect(), DAY, YEAR));
+            Assert.That(StoreAnswer.SaveAnswer("123", new Incorrect(), DAY, YEAR), Is.True);
+            Assert.That(StoreAnswer.SaveAnswer("123", new Incorrect(), DAY, YEAR), Is.False);
+            Assert.That(StoreAnswer.SaveAnswer("124", new Incorrect(), DAY, YEAR), Is.True);
         }
     }
 }

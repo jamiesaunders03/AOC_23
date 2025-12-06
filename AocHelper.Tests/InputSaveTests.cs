@@ -2,14 +2,13 @@ using AocHelper;
 
 namespace AocHelper.Tests
 {
-    [TestClass]
     public class InputSaveTests
     {
         private const string BASE_PATH = @"..\..\..\..\.cache\Input\0";
         private static readonly string _filePath = Path.Combine(BASE_PATH, "day0.txt");
         private InputSave _save = new(0, 0);
 
-        [TestCleanup]
+        [TearDown]
         public void Cleanup()
         {
             try
@@ -20,38 +19,38 @@ namespace AocHelper.Tests
             catch { }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSaveDataFileLocation()
         {
             _save.Save("Test string");
-            Assert.IsTrue(Directory.Exists(BASE_PATH));
-            Assert.IsTrue(File.Exists(_filePath));
+            Assert.That(Directory.Exists(BASE_PATH));
+            Assert.That(File.Exists(_filePath));
         }
 
-        [TestMethod]
+        [Test]
         public void TestSaveDataContent()
         {
             string testString = "Test string";
             _save.Save(testString);
 
             string actual = File.ReadAllText(_filePath);
-            Assert.AreEqual(testString, actual);
+            Assert.That(actual, Is.EqualTo(testString));
         }
 
-        [TestMethod]
+        [Test]
         public void TestSaveDataOverride()
         {
-            const string testString1 = "Test string";
-            const string testString2 = "Test string 2";
-            _save.Save(testString1);
+            const string TEST_STRING1 = "Test string";
+            const string TEST_STRING2 = "Test string 2";
+            _save.Save(TEST_STRING1);
 
-            _save.Save(testString2);
+            _save.Save(TEST_STRING2);
             string actual = File.ReadAllText(_filePath);
-            Assert.AreEqual(testString1, actual);
+            Assert.That(actual, Is.EqualTo(TEST_STRING1));
 
-            _save.Save(testString2, force:true);
+            _save.Save(TEST_STRING2, force:true);
             actual = File.ReadAllText(_filePath);
-            Assert.AreEqual(testString2, actual);
+            Assert.That(actual, Is.EqualTo(TEST_STRING2));
         }
     }
 }

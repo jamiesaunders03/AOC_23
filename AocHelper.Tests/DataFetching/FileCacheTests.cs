@@ -2,15 +2,14 @@ using AocHelper.DataSources;
 
 namespace AocHelper.Tests.DataFetching
 {
-    [TestClass]
     public class FileCacheTests
     {
         private const string TEST_FILE_PATH = @"..\..\..\TestData\FileCacheTestFiles";
         private const string TEST_FILE_DEST_PATH = @"..\..\..\..\.cache\Input\0";
         private static readonly string _data = "My test data" + Environment.NewLine + "in the file.";
 
-        [ClassInitialize]
-        public static void Startup(TestContext _)
+        [OneTimeSetUp]
+        public static void Startup()
         {
             Directory.CreateDirectory(TEST_FILE_DEST_PATH);
             foreach (string file in Directory.EnumerateFiles(TEST_FILE_PATH))
@@ -20,28 +19,28 @@ namespace AocHelper.Tests.DataFetching
             }
         }
 
-        [ClassCleanup]
+        [OneTimeTearDown]
         public static void Cleanup()
         {
             Directory.Delete(TEST_FILE_DEST_PATH, recursive: true);
         }
 
-        [TestMethod]
+        [Test]
         public void TestCantFindFile()
         {
             // .../0/day0.txt
             var source = new FileCacheSource(0, 0);
-            Assert.IsFalse(source.GetInput(out string reason));
-            Assert.IsTrue(reason.ToLower().Contains("file does not exist"));
+            Assert.That(source.GetInput(out string reason), Is.False);
+            Assert.That(reason.ToLower().Contains("file does not exist"), Is.True);
         }
 
-        [TestMethod]
+        [Test]
         public void TestReadFile()
         {
             // .../0/day1.txt
             var source = new FileCacheSource(1, 0);
-            Assert.IsTrue(source.GetInput(out string data));
-            Assert.AreEqual(_data, data);
+            Assert.That(source.GetInput(out string data), Is.True);
+            Assert.That(_data, Is.EqualTo(data));
         }
     }
 }
