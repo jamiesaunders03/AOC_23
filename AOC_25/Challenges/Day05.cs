@@ -100,30 +100,27 @@ public class Day05 : IAocChallenge
         do
         {
             toRemove = [];
-            HashSet<Range> newRanges = ranges.ToHashSet();
+            HashSet<Range> createdRanges = [];
 
             for (int i = 0; i < ranges.Count; ++i)
             {
+                Range ri = ranges.ElementAt(i);
                 for (int j = i + 1; j < ranges.Count; ++j)
                 {
-                    if (ranges.ElementAt(i).OverlapsWith(ranges.ElementAt(j)))
+                    Range rj = ranges.ElementAt(j);
+                    if (ri.OverlapsWith(rj))
                     {
-                        toRemove.Add(ranges.ElementAt(i));
-                        toRemove.Add(ranges.ElementAt(j));
-                        newRanges.Add(ranges.ElementAt(i).MergedWith(ranges.ElementAt(j)));
+                        toRemove.Add(ri);
+                        toRemove.Add(rj);
+                        createdRanges.Add(ri.MergedWith(rj));
                     }
                 }
             }
-            
-            foreach (Range r in toRemove)
-            {
-                newRanges.Remove(r);
-            }
-            
-            ranges = newRanges;
 
+            ranges.ExceptWith(toRemove);
+            ranges.UnionWith(createdRanges);
         } while (toRemove.Count != 0);
 
-        return ranges.Select(r => r.Length).Sum().ToString();  // 189052846855563 too low
+        return ranges.Select(r => r.Length).Sum().ToString();
     }
 }
