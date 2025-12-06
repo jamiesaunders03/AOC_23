@@ -30,6 +30,7 @@
       <None Update="nlog.config">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Remove="C:\Users\Jamie\.nuget\packages\nlog.config\4.7.15\contentFiles\any\any\NLog.config" />
     </ItemGroup>
 
 </Project>

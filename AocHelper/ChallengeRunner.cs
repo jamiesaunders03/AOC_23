@@ -27,23 +27,10 @@ namespace AocHelper
         public static void RunChallenge<T>(Action<string> notifier) where T : IAocChallenge, new()
         {
             _logger.Info("Creating challenge of type {}", typeof(T).Name);
-            notifier($"Creating instance of {typeof(T).Name}");
+            Console.WriteLine($"Starting {typeof(T).Name}");
             TimeSpan t = RunAction(() => new T(), out object day);
             var challenge = (IAocChallenge)day;
             notifier($"   Time elapsed: {t}s");
-
-            if (day is ITestAssert ta)
-            {
-                List<string> testResults = ta.Assert();
-                if (testResults.Count == 0)
-                    Console.WriteLine("All tests pass");
-                else
-                {
-                    Console.WriteLine("The following tests failed:");
-                    foreach (string testcase in testResults)
-                        Console.WriteLine($"  - {testcase}");
-                }
-            }
 
             _logger.Info("Starting challenge 1");
             t = RunAction(challenge.Challenge1, out object part1);

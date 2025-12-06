@@ -70,28 +70,27 @@ public class Day02 : IAocChallenge
         
         long total = 0;
         foreach (Range r in _ranges)
+            foreach (long i in r)
+                if (IdIsInvalid(i))
+                    total += i;
+
+        return total.ToString(); 
+    }
+
+    private static bool IdIsInvalid(long id)
+    {
+        string strId = id.ToString();
+
+        for (int i = 1; i <= strId.Length / 2; ++i)
         {
-            string str = r.Start.ToString();
-            for (int div = 2; div < str.Length; ++div)
-            {
-                string firstPart = new(str.Take(str.Length / div).ToArray());
-
-                if (firstPart == "")
-                    firstPart = "0";
-
-                while (true)
-                {
-                    long number = long.Parse(string.Join("", Enumerable.Repeat(firstPart, div)));
-                    if (r.Contains(number))
-                        total += number;
-                    else if (number > r.Start + r.Length)
-                        break;
-
-                    firstPart = (long.Parse(firstPart) + 1).ToString();
-                }
-            }
+            if (strId.Length % i != 0)
+                continue;
+            
+            string part = strId[..i];
+            if (strId == string.Join("", Enumerable.Repeat(part, strId.Length / i)))
+                return true;
         }
-
-        return total.ToString();  // 27324587484 too high
+        
+        return false;
     }
 }

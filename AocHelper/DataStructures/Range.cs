@@ -1,6 +1,9 @@
-﻿namespace AocHelper.DataStructures
+﻿using System.Collections;
+using System.Globalization;
+
+namespace AocHelper.DataStructures
 {
-    public class Range
+    public class Range : IEnumerable<long>
     {
         public long Start { get; }
         public long Length { get; }
@@ -43,6 +46,24 @@
         public override int GetHashCode()
         {
             return (Start, Length).GetHashCode();
+        }
+
+        #endregion
+
+        #region Interface Implementations
+
+        /// <summary>
+        /// Iterate over all numbers in this range
+        /// </summary>
+        public IEnumerator<long> GetEnumerator()
+        {
+            for (long i = Start; i <= End; ++i)
+                yield return i;
+        }
+        
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         #endregion
